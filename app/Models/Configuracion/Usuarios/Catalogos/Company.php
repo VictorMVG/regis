@@ -3,6 +3,7 @@
 namespace App\Models\Configuracion\Usuarios\Catalogos;
 
 use App\Models\Configuracion\Catalogos\Status;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +23,11 @@ class Company extends Model
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    //Relación uno a muchos con la tabla user
+    public function user()
+    {
+        return $this->hasMany(User::class);
     }
 }
