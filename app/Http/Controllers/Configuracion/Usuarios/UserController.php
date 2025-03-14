@@ -32,8 +32,9 @@ class UserController extends Controller
     public function create()
     {
         $companies = Company::all();
+        $headquarters = Company::all();
 
-        return view('configuracion.usuarios.usuario.create', compact('companies'));
+        return view('configuracion.usuarios.usuario.create', compact('companies', 'headquarters'));
     }
 
     /**
@@ -53,23 +54,29 @@ class UserController extends Controller
 
         try {
 
+            if (Status::count() == 0) {
+                Status::firstOrCreate(['name' => 'ACTIVO (A)']);
+                Status::firstOrCreate(['name' => 'INACTIVO (A)']);
+            }
+
             $user = User::create([
                 'company_id' => $request['company_id'],
+                'status_id' => Status::where('name', 'ACTIVO (A)')->first()->id,
                 'name' => $request['name'],
                 'email' => $request['email'],
                 'password' => Hash::make($request['password']),
             ]);
 
-            if (Status::count() == 0) {
-                Status::firstOrCreate(['name' => 'ACTIVO']);
-                Status::firstOrCreate(['name' => 'INACTIVO']);
-            }
-
             if (User::count() == 1) {
                 // Crear el rol ADMIN si no existe
-                $adminRole = Role::firstOrCreate(['name' => 'ADMIN']);
+                $adminRole = Role::firstOrCreate(['name' => 'SUPER USUARIO']);
                 // Asignar el rol ADMIN al primer usuario
                 $user->assignRole($adminRole);
+            } else {
+                // Crear el rol GUARDIA si no existe
+                $guardRole = Role::firstOrCreate(['name' => 'GUARDIA']);
+                // Asignar el rol GUARDIA al nuevo usuario
+                $user->assignRole($guardRole);
             }
 
             DB::commit();
@@ -106,8 +113,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $companies = Company::all();
+        $statuses = Status::all();
+        $roles = Role::where('name', '!=', 'SUPER USUARIO')->get();   
+        $headquarters = Company::all();
 
-        return view('configuracion.usuarios.usuario.edit', compact('user', 'companies'));
+        return view('configuracion.usuarios.usuario.edit', compact('user', 'companies', 'statuses', 'roles', 'headquarters'));
     }
 
     /**
@@ -115,26 +125,12 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // Cargar explícitamente la relación userDetail
-        $user->load('userDetail');
-
         Validator::make($request->all(), [
-            'employee_number' => ['required', 'integer', 'min:1', 'unique:user_details,employee_number,' . $user->userDetail->user_id . ',user_id,company_id,' . $user->userDetail->company_id],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'string', 'min:8'],
-            'honorary_title_id' => ['required', 'exists:honorary_titles,id'],
             'name' => ['required', 'string', 'max:100'],
-            'paternal_surname' => ['required', 'string', 'max:100'],
-            'maternal_surname' => ['required', 'string', 'max:100'],
-            'user_category_id' => ['required', 'exists:user_categories,id'],
-            'blood_type_id' => ['nullable', 'exists:blood_types,id'],
-            'rfc' => ['nullable', 'string', 'max:13', 'unique:user_details,rfc,' . $user->userDetail->user_id . ',user_id,company_id,' . $user->userDetail->company_id],
-            'curp' => ['required', 'string', 'max:18', 'unique:user_details,curp,' . $user->userDetail->user_id . ',user_id,company_id,' . $user->userDetail->company_id],
-            'nss' => ['nullable', 'string', 'max:11', 'unique:user_details,nss,' . $user->userDetail->user_id . ',user_id,company_id,' . $user->userDetail->company_id],
-            'phone_number' => ['nullable', 'string', 'max:15'],
-            'allergies' => ['nullable', 'string', 'max:255'],
-            'emergency_contact_name' => ['nullable', 'string', 'max:255'],
-            'emergency_contact_phone' => ['nullable', 'string', 'max:15'],
+            'roles' => ['required', 'array'],
+            'roles.*' => ['integer', 'exists:roles,id'],
         ])->validate();
 
         DB::beginTransaction();
@@ -148,6 +144,19 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->save();
 
+            // Obtener el rol SUPER USUARIO
+            $superUserRole = Role::where('name', 'SUPER USUARIO')->first();
+
+            // Sincronizar roles
+            $roles = $request->roles;
+
+            // Si el usuario tiene el rol SUPER USUARIO, asegúrate de que no se quite
+            if ($user->hasRole('SUPER USUARIO') && $superUserRole) {
+                $roles[] = $superUserRole->id;
+            }
+
+            $user->roles()->sync($roles);
+
             DB::commit();
 
             session()->flash('swal', json_encode([
@@ -155,6 +164,8 @@ class UserController extends Controller
                 'text' => 'Usuario actualizado correctamente',
                 'icon' => 'success',
             ]));
+
+            return redirect()->route('users.index');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -165,7 +176,7 @@ class UserController extends Controller
             ]));
         }
 
-        return redirect()->route('users.show', $user);
+        return redirect()->route('users.index');
     }
 
     /**

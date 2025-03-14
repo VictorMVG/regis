@@ -128,6 +128,17 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         try {
+            
+            // validar que el rol no este siendo utilizado
+            if ($role->users()->exists()) {
+                session()->flash('swal', json_encode([
+                    'title' => 'Error',
+                    'text' => 'El rol no puede ser eliminado porque está siendo utilizado por uno o más usuarios.',
+                    'icon' => 'error',
+                ]));
+                return redirect()->route('roles.index');
+            }
+
             $role->delete();
 
             session()->flash('swal', json_encode([

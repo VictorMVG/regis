@@ -17,20 +17,25 @@ class RoleSeeder extends Seeder
             [
                 'name' => 'GUARDIA',
                 'permissions' => [
-                    'MIS REGISTROS',
+                    'VISITAS DEL DIA',
                 ],
             ],
             [
                 'name' => 'ADMINISTRADOR DE SEDE',
                 'permissions' => [
                     'ADMINISTRACIÓN DE LA SEDE',
-                    'MIS REGISTROS',
+                    'VISITAS DEL DIA',
                 ],
             ],
             [
-                'name' => 'ADMIN',
+                'name' => 'ADMINISTRADOR GENERAL',
                 'permissions' => [
                     'ADMINISTRACIÓN GENERAL',
+                ],
+            ],
+            [
+                'name' => 'SUPER USUARIO',
+                'permissions' => [
                 ],
             ],
         ];

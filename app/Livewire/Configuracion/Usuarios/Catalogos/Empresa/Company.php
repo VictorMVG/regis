@@ -23,8 +23,8 @@ class Company extends Component
     public function render()
     {
         $companies = CompanyWireModel::query()
-            ->where('company', 'like', '%' . $this->search . '%')
-            ->orWhere('headquarter', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%' . $this->search . '%')
+            ->orWhere('alias', 'like', '%' . $this->search . '%')
             ->orderBy('id')
             ->paginate(10);
 

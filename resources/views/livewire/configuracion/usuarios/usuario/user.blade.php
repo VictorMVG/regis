@@ -51,13 +51,19 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-4 py-3">
-                        {{ __('Company') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
                         {{ __('User') }}
                     </th>
                     <th scope="col" class="px-4 py-3">
                         {{ __('Email') }}
+                    </th>
+                    <th scope="col" class="px-4 py-3">
+                        {{ __('Rol') }}
+                    </th>
+                    <th scope="col" class="px-4 py-3">
+                        {{ __('Headquarter') }}
+                    </th>
+                    <th scope="col" class="px-4 py-3">
+                        {{ __('Status') }}
                     </th>
                     <th scope="col" class="px-4 py-3">
                         <span class="sr-only">
@@ -70,19 +76,21 @@
                 @foreach ($users as $user)
                     <tr wire:key="{{ $user->id }}"
                         class="border-b dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                        <td class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
-                            @if ($user->company && $user->company->company)
-                                {{ $user->company->company }} - {{ $user->company->headquarter }}
-                            @else
-                                SEDE NO ASIGNADA
-                            @endif
-                        </td>
                         <td class="px-4 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $user->name }}
                         </td>
                         <td class="px-4 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $user->email }}
-                            </th>
+                        </th>
+                        <td class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
+                            {{ $user->roles->pluck('name')->implode(', ') }}
+                        </td>
+                        <td class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
+                            {{ $user->company ? $user->company->name : '-' }} - {{ $user->headquarter ? $user->headquarter->name : '-' }}
+                        </td>
+                        <td class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
+                            {{ $user->status->name }}
+                        </td>
                         <td class="px-4 py-1 flex items-center justify-center relative" x-data="{ open: {}, up: false }">
                             <x-action-td :id="$user->id" :routes="[
                                 ['name' => 'Edit', 'route' => 'users.edit'],

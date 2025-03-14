@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Configuracion\Usuarios\Catalogos;
 
 use App\Http\Controllers\Controller;
-use App\Models\Configuracion\Usuarios\Catalogos\Company;
 use App\Models\Configuracion\Catalogos\Status;
+use App\Models\Configuracion\Usuarios\Catalogos\Company;
+use App\Models\Configuracion\Usuarios\Catalogos\Headquarter;
 use Illuminate\Http\Request;
 
-class CompanyController extends Controller
+class HeadquarterController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('configuracion.usuarios.catalogos.empresa.index');
+        return view('configuracion.usuarios.catalogos.sede.index');
     }
 
     /**
@@ -22,7 +23,8 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('configuracion.usuarios.catalogos.empresa.create');
+        $companies = Company::all();
+        return view('configuracion.usuarios.catalogos.sede.create', compact('companies'));
     }
 
     /**
@@ -31,88 +33,94 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:companies',
-            'alias' => 'required|string|max:255|unique:companies',
+            'company_id' => 'required|integer|exists:companies,id',
+            'name' => 'required|string|max:255|unique:headquarters,name,NULL,id,company_id,' . $request->company_id,
         ]);
 
         try {
 
-            Company::create($request->all());
+            Headquarter::create($request->all());
 
             session()->flash('swal', json_encode([
                 'title' => '!Bien hecho!',
-                'text' => 'Empresa creada correctamente',
+                'text' => 'Sede creada correctamente',
                 'icon' => 'success',
             ]));
+
+            return redirect()->route('headquarters.index');
         } catch (\Exception $e) {
+
             session()->flash('swal', json_encode([
                 'title' => 'Error',
-                'text' => 'Hubo un problema al crear la empresa.',
+                'text' => 'Hubo un problema al crear la sede.',
                 'icon' => 'error',
             ]));
         }
 
-        return redirect()->route('companies.index');
+        return redirect()->route('headquarters.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Company $company)
+    public function show(Headquarter $headquarter)
     {
-        return view('configuracion.usuarios.catalogos.empresa.show', compact('company'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company)
+    public function edit(Headquarter $headquarter)
     {
         $statuses = Status::all();
-        return view('configuracion.usuarios.catalogos.empresa.edit', compact('company', 'statuses'));
+        $companies = Company::all();
+
+        return view('configuracion.usuarios.catalogos.sede.edit', compact('headquarter', 'statuses', 'companies'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request, Headquarter $headquarter)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:companies,name,' . $company->id,
-            'alias' => 'required|string|max:255|unique:companies,alias,' . $company->id,
+            'company_id' => 'required|integer|exists:companies,id',
+            'name' => 'required|string|max:255|unique:headquarters,name,' . $headquarter->id . ',id,company_id,' . $request->company_id,
             'status_id' => 'required|exists:statuses,id',
         ]);
 
         try {
 
-            $company->update($request->all());
+            $headquarter->update($request->all());
 
             session()->flash('swal', json_encode([
                 'title' => '!Bien hecho!',
-                'text' => 'Empresa actualizada correctamente',
+                'text' => 'Sede actualizada correctamente',
                 'icon' => 'success',
             ]));
 
-            return redirect()->route('companies.index');
+            return redirect()->route('headquarters.index');
         } catch (\Exception $e) {
+
             session()->flash('swal', json_encode([
                 'title' => 'Error',
-                'text' => 'Hubo un problema al actualizar la empresa.',
+                'text' => 'Hubo un problema al actualizar la sede.',
                 'icon' => 'error',
             ]));
         }
 
-        return redirect()->route('companies.index');
+        return redirect()->route('headquarters.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
+    public function destroy(Headquarter $headquarter)
     {
         try {
 
-            $company->delete();
+            $headquarter->delete();
 
             session()->flash('swal', json_encode([
                 'title' => '!Bien hecho!',
@@ -120,7 +128,8 @@ class CompanyController extends Controller
                 'icon' => 'success',
             ]));
 
-            return redirect()->route('companies.index');
+            return redirect()->route('headquarters.index');
+            
         } catch (\Exception $e) {
 
             session()->flash('swal', json_encode([
@@ -128,9 +137,8 @@ class CompanyController extends Controller
                 'text' => 'Hubo un problema al eliminar la sede.',
                 'icon' => 'error',
             ]));
-            
         }
 
-        return redirect()->route('companies.index');
+        return redirect()->route('headquarters.index');
     }
 }

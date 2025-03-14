@@ -4,7 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Configuracion\Catalogos\Status;
 use App\Models\Configuracion\Usuarios\Catalogos\Company;
+use App\Models\Configuracion\Usuarios\Catalogos\Headquarter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -34,6 +36,8 @@ class User extends Authenticatable
         'email',
         'password',
         'company_id',
+        'headquarter_id',
+        'status_id',
     ];
 
     /**
@@ -74,5 +78,17 @@ class User extends Authenticatable
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    //Relacion uno a muchos inversa con la tabla status
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    //Relacion uno a muchos inversa con la tabla headquarters
+    public function headquarter()
+    {
+        return $this->belongsTo(Headquarter::class);
     }
 }

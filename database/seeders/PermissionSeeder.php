@@ -23,7 +23,7 @@ class PermissionSeeder extends Seeder
                 'guard_name' => 'sanctum',
             ],
             [
-                'name' => 'MIS REGISTROS',
+                'name' => 'VISITAS DEL DIA',
                 'guard_name' => 'sanctum',
             ],
         ];

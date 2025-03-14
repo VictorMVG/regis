@@ -1,12 +1,12 @@
 <x-app-layout>
-    <x-form-full title="{{ __('Editing:') }} {{ $company->company }} - {{ $company->headquarter }}" method="PUT"
+    <x-form-full title="{{ __('Editing:') }} {{ $company->name }}" method="PUT"
         action="{{ route('companies.update', $company) }}" buttonText="{{ __('Update') }}">
 
-        <x-input-full id="company" name="company" label="{{ __('Company') }}" defaultValue="{{ $company->company }}"
+        <x-input-full id="name" name="name" label="{{ __('Name') }}" defaultValue="{{ $company->name }}"
             required />
 
-        <x-input-full id="headquarter" name="headquarter" label="{{ __('Headquarter') }}"
-            defaultValue="{{ $company->headquarter }}" required />
+        <x-input-full id="alias" name="alias" label="{{ __('Abreviation') }}"
+            defaultValue="{{ $company->alias }}" required />
 
         <x-select-full name="status_id" id="status_id" label="{{ __('Status') }}"
             defaultValue="{{ $company->status_id }}" required>

@@ -378,6 +378,12 @@
     "EMPRESA": "____________________________________________________________________________________",
     "Company": "Empresa",
     "Companies": "Empresas",
-    "Headquarter": "Sede"
+    "Headquarter": "Sede",
+    "Headquarters": "Sedes",
+    "Abreviation": "Abreviación",
+    "Headquarter name": "Nombre de la sede",
+    "Company name": "Nombre de la empresa",
+    "USUARIO": "____________________________________________________________________________________",
+    "Users": "Usuarios"
 
 }

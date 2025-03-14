@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('unit_colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('alias')->unique();
-            $table->foreignId('status_id')->default(1)->constrained()->onDelete('restrict');
+            $table->timestamps();
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('unit_colors');
     }
 };

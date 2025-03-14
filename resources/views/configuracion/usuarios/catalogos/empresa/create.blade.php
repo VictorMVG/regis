@@ -2,9 +2,9 @@
     <x-form-full title="{{ __('Adding:') }} {{ __('New registration') }}" method="POST"
         action="{{ route('companies.store') }}" buttonText="{{ __('Save') }}">
 
-        <x-input-full id="company" name="company" label="{{ __('Company') }}" required/>
+        <x-input-full id="name" name="name" label="{{ __('Name') }}" required/>
 
-        <x-input-full id="headquarter" name="headquarter" label="{{ __('Headquarter') }}" required/>
+        <x-input-full id="alias" name="alias" label="{{ __('Abreviation') }}" required/>
 
     </x-form-full>
 

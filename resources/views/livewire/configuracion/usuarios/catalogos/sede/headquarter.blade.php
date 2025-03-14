@@ -28,7 +28,7 @@
             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 px-2 py-1">
 
             <!-- Add Buttons -->
-            <a href="{{ route('companies.create') }}">
+            <a href="{{ route('headquarters.create') }}">
                 <x-button type="button" color="green">
                     <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
 
     </div>
     <div class="p-2">
-        {{ $companies->links() }}
+        {{ $headquarters->links() }}
     </div>
     <!-- Table -->
     <div class="overflow-x-auto pb-32">
@@ -51,10 +51,13 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-4 py-3">
-                        {{ __('Name') }}
+                        {{ __('Company name') }}
                     </th>
                     <th scope="col" class="px-4 py-3">
-                        {{ __('Abreviation') }}
+                        {{ __('Headquarter name') }}
+                    </th>
+                    <th scope="col" class="px-4 py-3">
+                        {{ __('Description') }}
                     </th>
                     <th scope="col" class="px-4 py-3">
                         {{ __('Status') }}
@@ -67,25 +70,29 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($companies as $company)
-                    <tr wire:key="{{ $company->id }}"
+                @foreach ($headquarters as $headquarter)
+                    <tr wire:key="{{ $headquarter->id }}"
                         class="border-b dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
                         <th scope="row"
                             class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $company->name }}
+                            {{ $headquarter->company->name }}
                         </th>
                         <th scope="row"
                             class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $company->alias }}
+                            {{ $headquarter->name }}
+                        </th>
+                        <th scope="row"
+                            class="px-4 py-3 font-medium text-gray-900 text-wrap dark:text-white">
+                            {{ $headquarter->description }}
                         </th>
                         <th scope="row"
                             class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $company->status->name }}
+                            {{ $headquarter->status->name }}
                         </th>
                         <td class="px-4 py-3 flex items-center justify-center relative" x-data="{ open: {}, up: false }">
-                            <x-action-td :id="$company->id" :routes="[
-                                ['name' => 'Edit', 'route' => 'companies.edit'],
-                                ['name' => 'Destroy', 'route' => 'companies.destroy', 'method' => 'DELETE'],
+                            <x-action-td :id="$headquarter->id" :routes="[
+                                ['name' => 'Edit', 'route' => 'headquarters.edit'],
+                                ['name' => 'Destroy', 'route' => 'headquarters.destroy', 'method' => 'DELETE'],
                             ]" />
                         </td>
                     </tr>
@@ -93,7 +100,7 @@
             </tbody>
         </table>
         <div class="p-4">
-            {{ $companies->links() }}
+            {{ $headquarters->links() }}
         </div>
     </div>
 </div>

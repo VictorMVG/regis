@@ -15,8 +15,16 @@ class CompanySeeder extends Seeder
     {
         $companies = [
             [
-                'company' => 'SLB',
-                'headquarter' => 'VILLAHERMOSA',
+                'name' => 'NO ASIGNADO',
+                'alias' => 'NA',
+            ],
+            [
+                'name' => 'SLUMBERGER',
+                'alias' => 'SLB',
+            ],
+            [
+                'name' => 'HALLIBURTON',
+                'alias' => 'HB',
             ],
         ];
 
