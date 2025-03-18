@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Configuracion\Usuarios;
 use App\Http\Controllers\Controller;
 use App\Models\Configuracion\Catalogos\Status;
 use App\Models\Configuracion\Usuarios\Catalogos\Company;
+use App\Models\Configuracion\Usuarios\Catalogos\Headquarter;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +33,7 @@ class UserController extends Controller
     public function create()
     {
         $companies = Company::all();
-        $headquarters = Company::all();
+        $headquarters = Headquarter::with('company')->get();
 
         return view('configuracion.usuarios.usuario.create', compact('companies', 'headquarters'));
     }
@@ -43,7 +44,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
-            'company_id' => ['required', 'exists:companies,id'],
+            'company_id' => ['exists:companies,id'],
+            'headquarter_id' => ['required', 'exists:headquarters,id'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
@@ -61,6 +63,7 @@ class UserController extends Controller
 
             $user = User::create([
                 'company_id' => $request['company_id'],
+                'headquarter_id' => $request['headquarter_id'],
                 'status_id' => Status::where('name', 'ACTIVO (A)')->first()->id,
                 'name' => $request['name'],
                 'email' => $request['email'],
@@ -114,8 +117,8 @@ class UserController extends Controller
     {
         $companies = Company::all();
         $statuses = Status::all();
-        $roles = Role::where('name', '!=', 'SUPER USUARIO')->get();   
-        $headquarters = Company::all();
+        $roles = Role::where('name', '!=', 'SUPER USUARIO')->get();
+        $headquarters = Headquarter::with('company')->get();
 
         return view('configuracion.usuarios.usuario.edit', compact('user', 'companies', 'statuses', 'roles', 'headquarters'));
     }
@@ -125,30 +128,40 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        Validator::make($request->all(), [
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'status_id' => ['required', 'exists:statuses,id'],
+            'company_id' => ['nullable', 'exists:companies,id'],
+            'headquarter_id' => ['required', 'exists:headquarters,id'],
             'password' => ['nullable', 'string', 'min:8'],
             'name' => ['required', 'string', 'max:100'],
             'roles' => ['required', 'array'],
             'roles.*' => ['integer', 'exists:roles,id'],
-        ])->validate();
+        ]);
 
         DB::beginTransaction();
 
         try {
-            // Actualizar el usuario
-            $user->email = $request->email;
-            if ($request->filled('password')) {
-                $user->password = Hash::make($request->password);
+            // Actualizar los datos básicos del usuario
+            $user->email = $validatedData['email'];
+            $user->status_id = $validatedData['status_id'];
+            $user->company_id = $validatedData['company_id'] ?? null;
+            $user->headquarter_id = $validatedData['headquarter_id'];
+            $user->name = $validatedData['name'];
+
+            // Actualizar la contraseña si se proporciona
+            if (!empty($validatedData['password'])) {
+                $user->password = Hash::make($validatedData['password']);
             }
-            $user->name = $request->name;
+
             $user->save();
 
             // Obtener el rol SUPER USUARIO
             $superUserRole = Role::where('name', 'SUPER USUARIO')->first();
 
             // Sincronizar roles
-            $roles = $request->roles;
+            $roles = $validatedData['roles'];
 
             // Si el usuario tiene el rol SUPER USUARIO, asegúrate de que no se quite
             if ($user->hasRole('SUPER USUARIO') && $superUserRole) {
@@ -159,6 +172,7 @@ class UserController extends Controller
 
             DB::commit();
 
+            // Mensaje de éxito
             session()->flash('swal', json_encode([
                 'title' => '!Bien hecho!',
                 'text' => 'Usuario actualizado correctamente',
@@ -169,14 +183,15 @@ class UserController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
+            // Mensaje de error
             session()->flash('swal', json_encode([
                 'title' => 'Error',
                 'text' => 'Hubo un problema al actualizar el Usuario. ' . $e->getMessage(),
                 'icon' => 'error',
             ]));
-        }
 
-        return redirect()->route('users.index');
+            return redirect()->route('users.index');
+        }
     }
 
     /**

@@ -14,7 +14,8 @@
                                 defaultOption="Selecciona la empresa">
                                 @foreach ($companies as $company)
                                     <option value="{{ $company->id }}" @selected(old('company_id') == $company->id)>
-                                        {{ $company->company }} - {{ $company->headquarter }}</option>
+                                        {{ $company->name }}
+                                    </option>
                                 @endforeach
                             </x-select-full>
                         </div>
@@ -23,7 +24,8 @@
                                 defaultOption="Selecciona la sede" required>
                                 @foreach ($headquarters as $headquarter)
                                     <option value="{{ $headquarter->id }}" @selected(old('headquarter_id') == $headquarter->id)>
-                                        {{ $headquarter->name }}</option>
+                                        {{ $headquarter->company->name }} - {{ $headquarter->name }}
+                                    </option>
                                 @endforeach
                             </x-select-full>
                         </div>

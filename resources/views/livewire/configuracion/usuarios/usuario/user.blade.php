@@ -86,7 +86,7 @@
                             {{ $user->roles->pluck('name')->implode(', ') }}
                         </td>
                         <td class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
-                            {{ $user->company ? $user->company->name : '-' }} - {{ $user->headquarter ? $user->headquarter->name : '-' }}
+                            {{ $user->headquarter ? $user->headquarter->company->name .  ' - ' . $user->headquarter->name : '-' }}
                         </td>
                         <td class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
                             {{ $user->status->name }}
