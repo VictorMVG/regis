@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Livewire\Configuracion\Usuarios\Catalogos\Permiso\Permission;
+use App\Livewire\Visitas\Visita\Visit;
 use App\Models\User;
+use Carbon\Unit;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,17 +24,10 @@ class DatabaseSeeder extends Seeder
             HeadquarterSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
-            // UserSeeder::class,
+            UnitTypeSeeder::class,
+            UnitColorSeeder::class,
+            UserSeeder::class,
+            VisitSeeder::class,
         ]);
-
-        $user = User::factory()->create([
-            'name' => 'USUARIO DE PRUEBA',
-            'email' => 'ADMIN@GMAIL.COM',
-            'password' => bcrypt('12345678'),
-            'status_id' => 1,
-            'company_id' => 1,
-        ]);
-
-        $user->assignRole('SUPER USUARIO');
     }
 }

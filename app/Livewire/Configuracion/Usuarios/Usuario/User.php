@@ -33,7 +33,11 @@ class User extends Component
                         $query->where('name', 'like', '%' . $this->search . '%');
                     });
             })
-            ->orderBy('id')
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'SUPER USUARIO');
+            })
+            ->orderBy('status_id')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
         return view('livewire.configuracion.usuarios.usuario.user', compact('users'));

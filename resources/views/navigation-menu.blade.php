@@ -30,6 +30,12 @@
                     <x-nav-link href="{{ route('roles.index') }}" :active="request()->routeIs('roles.*')">
                         {{ __('Roles') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('unit-colors.index') }}" :active="request()->routeIs('unit-colors.*')">
+                        {{ __('Unit colors') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('unit-types.index') }}" :active="request()->routeIs('unit-types.*')">
+                        {{ __('Unit types') }}
+                    </x-nav-link>
                     <x-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
                         {{ __('Visits') }}
                     </x-nav-link>
@@ -185,6 +191,12 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link href="{{ route('roles.index') }}" :active="request()->routeIs('roles.*')">
                 {{ __('Roles') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('unit-colors.index') }}" :active="request()->routeIs('unit-colors.*')">
+                {{ __('Unit Colors') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('unit-types.index') }}" :active="request()->routeIs('unit-types.*')">
+                {{ __('Unit Types') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
                 {{ __('Visits') }}

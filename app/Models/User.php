@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Configuracion\Catalogos\Status;
 use App\Models\Configuracion\Usuarios\Catalogos\Company;
 use App\Models\Configuracion\Usuarios\Catalogos\Headquarter;
+use App\Models\Visitas\Visita\Visit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -90,5 +91,11 @@ class User extends Authenticatable
     public function headquarter()
     {
         return $this->belongsTo(Headquarter::class);
+    }
+
+    //Relacion uno a muchos con la tabla visits
+    public function visits()
+    {
+        return $this->hasMany(Visit::class);
     }
 }

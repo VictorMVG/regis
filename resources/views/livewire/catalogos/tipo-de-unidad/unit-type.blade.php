@@ -28,7 +28,7 @@
             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 px-2 py-1">
 
             <!-- Add Buttons -->
-            <a href="{{ route('visits.create') }}">
+            <a href="{{ route('unit-types.create') }}">
                 <x-button type="button" color="green">
                     <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
 
     </div>
     <div class="p-2">
-        {{ $visits->links() }}
+        {{ $unitTypes->links() }}
     </div>
     <!-- Table -->
     <div class="overflow-x-auto pb-32">
@@ -51,22 +51,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-4 py-3">
-                        {{ __('Name and company') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3 text-wrap">
-                        {{ __('Visit reason') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Alcohol test') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Unit') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Entry time') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Exit time') }}
+                        {{ __('Nombre') }}
                     </th>
                     <th scope="col" class="px-4 py-3">
                         <span class="sr-only">
@@ -76,47 +61,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($visits as $visit)
-                    <tr wire:key="{{ $visit->id }}"
+                @foreach ($unitTypes as $unitType)
+                    <tr wire:key="{{ $unitType->id }}"
                         class="border-b dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
                         <th scope="row"
-                            class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
-                            {{ $visit->visitor_name }}
-                            <br>
-                            {{ $visit->company_name }}
-                        </th>
-                        <th scope="row"
-                            class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
-                            <span class=" font-extrabold text-xs text-gray-500 dark:text-gray-400">PARA:</span> {{ $visit->reason }}
-                            <br> 
-                            <span class=" font-extrabold text-xs text-gray-500 dark:text-gray-400">CON:</span> {{ $visit->to_see }}
-                        </th>
-                        <th scope="row"
-                            class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
-                            {{ $visit->alcohol_test ? 'POSITIVO' : 'NEGATIVO' }}
-                        </th>
-                        <th scope="row"
-                            class="px-4 py-1 font-medium text-gray-900 text-wrap dark:text-white">
-                            {{ $visit->unit ? 'SI' : 'NO' }}
-                        </th>
-                        <th scope="row"
                             class="px-4 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $visit->created_at->format('d/m/Y H:i') }} <br>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $visit->created_at->diffForHumans() }}
-                            </span>
-                        </th>
-                        <th scope="row"
-                            class="px-4 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $visit->updated_at->format('d/m/Y H:i') }} <br>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $visit->updated_at->diffForHumans() }}
-                            </span>
+                            {{ $unitType->name }}
                         </th>
                         <td class="px-4 py-1 flex items-center justify-center relative" x-data="{ open: {}, up: false }">
-                            <x-action-td :id="$visit->id" :routes="[
-                                ['name' => 'Edit', 'route' => 'visits.edit'],
-                                ['name' => 'Destroy', 'route' => 'visits.destroy', 'method' => 'DELETE'],
+                            <x-action-td :id="$unitType->id" :routes="[
+                                ['name' => 'Edit', 'route' => 'unit-types.edit'],
+                                ['name' => 'Destroy', 'route' => 'unit-types.destroy', 'method' => 'DELETE'],
                             ]" />
                         </td>
                     </tr>
@@ -124,7 +79,7 @@
             </tbody>
         </table>
         <div class="p-4">
-            {{ $visits->links() }}
+            {{ $unitTypes->links() }}
         </div>
     </div>
 </div>

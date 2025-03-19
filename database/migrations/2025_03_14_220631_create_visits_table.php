@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreignId('unit_color_id')->nullable()->constrained()->OnDelete('restrict');
             $table->text('comment')->nullable();
             $table->timestamps();
+            $table->timestamp('exit_time')->nullable();
         });
     }
 
