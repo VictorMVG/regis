@@ -18,6 +18,7 @@ class VisitFactory extends Factory
     {
         return [
             'user_id' => 1, // Siempre será el usuario con ID 1
+            'headquarter_id' => $this->faker->numberBetween(1, 4),
             'visitor_name' => $this->faker->name(),
             'company_name' => $this->faker->company(),
             'reason' => $this->faker->sentence(),

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Visitas\Visita;
 
 use App\Http\Controllers\Controller;
+use App\Models\Catalogos\UnitColor;
+use App\Models\Catalogos\UnitType;
 use App\Models\Visitas\Visita\Visit;
 use Illuminate\Http\Request;
 
@@ -21,7 +23,9 @@ class VisitController extends Controller
      */
     public function create()
     {
-        //
+        $unitColors = UnitColor::all();
+        $unitTypes = UnitType::all();
+        return view('visitas.visita.create', compact('unitColors', 'unitTypes'));
     }
 
     /**
@@ -45,7 +49,9 @@ class VisitController extends Controller
      */
     public function edit(Visit $visit)
     {
-        //
+        $unitColors = UnitColor::all();
+        $unitTypes = UnitType::all();
+        return view('visitas.visita.edit', compact('visit', 'unitColors', 'unitTypes'));
     }
 
     /**

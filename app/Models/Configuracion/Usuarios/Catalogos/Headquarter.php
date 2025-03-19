@@ -4,6 +4,7 @@ namespace App\Models\Configuracion\Usuarios\Catalogos;
 
 use App\Models\Configuracion\Catalogos\Status;
 use App\Models\User;
+use App\Models\Visitas\Visita\Visit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,5 +37,11 @@ class Headquarter extends Model
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    // Relación uno a muchos con la tabla visits
+    public function visit()
+    {
+        return $this->hasMany(Visit::class);
     }
 }

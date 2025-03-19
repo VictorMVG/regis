@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->OnDelete('restrict');
+            $table->foreignId('headquarter_id')->constrained()->OnDelete('restrict');
             $table->string('visitor_name');
             $table->string('company_name');
             $table->string('reason');

@@ -4,6 +4,7 @@ namespace App\Models\Visitas\Visita;
 
 use App\Models\Catalogos\UnitColor;
 use App\Models\Catalogos\UnitType;
+use App\Models\Configuracion\Usuarios\Catalogos\Headquarter;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,5 +46,11 @@ class Visit extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    //relacion uno a muchos inversa con la tabla headquarters
+    public function headquarter()
+    {
+        return $this->belongsTo(Headquarter::class);
     }
 }
