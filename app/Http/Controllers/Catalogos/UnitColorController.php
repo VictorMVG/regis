@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalogos\UnitColor;
 use Illuminate\Http\Request;
 
+
 class UnitColorController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */

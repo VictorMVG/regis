@@ -32,8 +32,21 @@ class UserController extends Controller
      */
     public function create()
     {
+        // usuario autenticado
+        $user = auth()->user();
+
         $companies = Company::all();
-        $headquarters = Headquarter::with('company')->get();
+
+        // Verificar si el usuario tiene el rol ADMINISTRADOR DE SEDE
+        if ($user->hasRole('ADMINISTRADOR DE SEDE')) {
+            // Filtrar los headquarters por el company_id del usuario autenticado
+            $headquarters = Headquarter::with('company')
+                ->where('company_id', $user->company_id)
+                ->get();
+        } else {
+            // Si no tiene el rol ADMINISTRADOR DE SEDE, obtener todos los headquarters
+            $headquarters = Headquarter::with('company')->get();
+        }
 
         return view('configuracion.usuarios.usuario.create', compact('companies', 'headquarters'));
     }
@@ -128,6 +141,9 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // Usuario autenticado
+        $authUser = auth()->user();
+
         // Validar los datos del formulario
         $validatedData = $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
@@ -136,7 +152,7 @@ class UserController extends Controller
             'headquarter_id' => ['required', 'exists:headquarters,id'],
             'password' => ['nullable', 'string', 'min:8'],
             'name' => ['required', 'string', 'max:100'],
-            'roles' => ['required', 'array'],
+            'roles' => ['nullable', 'array'], // Permitir que roles sea nulo
             'roles.*' => ['integer', 'exists:roles,id'],
         ]);
 
@@ -157,18 +173,20 @@ class UserController extends Controller
 
             $user->save();
 
-            // Obtener el rol SUPER USUARIO
-            $superUserRole = Role::where('name', 'SUPER USUARIO')->first();
+            // Sincronizar roles solo si se proporcionan
+            if (!empty($validatedData['roles'])) {
+                // Obtener el rol SUPER USUARIO
+                $superUserRole = Role::where('name', 'SUPER USUARIO')->first();
 
-            // Sincronizar roles
-            $roles = $validatedData['roles'];
+                $roles = $validatedData['roles'];
 
-            // Si el usuario tiene el rol SUPER USUARIO, asegúrate de que no se quite
-            if ($user->hasRole('SUPER USUARIO') && $superUserRole) {
-                $roles[] = $superUserRole->id;
+                // Si el usuario tiene el rol SUPER USUARIO, asegúrate de que no se quite
+                if ($user->hasRole('SUPER USUARIO') && $superUserRole) {
+                    $roles[] = $superUserRole->id;
+                }
+
+                $user->roles()->sync($roles);
             }
-
-            $user->roles()->sync($roles);
 
             DB::commit();
 

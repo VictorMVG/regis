@@ -98,4 +98,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Visit::class);
     }
+
+    // Relación uno a muchos con la tabla visits (registros actualizados por el usuario)
+    public function updatedVisits()
+    {
+        return $this->hasMany(Visit::class, 'updated_by');
+    }
+
+    // Relación uno a muchos con la tabla visits (registros de salida registrados por el usuario)
+    public function exitRegisteredVisits()
+    {
+        return $this->hasMany(Visit::class, 'exit_registered_by');
+    }
 }

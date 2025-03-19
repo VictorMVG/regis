@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('headquarters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->OnDelete('restrict');
+            $table->foreignId('company_id')->nullable()->constrained()->OnDelete('restrict');
             $table->string('name');
             $table->string('description')->nullable();
             $table->foreignId('status_id')->default(1)->constrained()->OnDelete('restrict');

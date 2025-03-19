@@ -9,16 +9,18 @@
                 <!-- Column -->
                 <div class="space-y-2 sm:space-y-4">
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                        <div class="w-full">
-                            <x-select-full name="company_id" id="company_id" label="{{ __('Empresa') }}"
-                                defaultOption="Selecciona la empresa">
-                                @foreach ($companies as $company)
-                                    <option value="{{ $company->id }}" @selected(old('company_id') == $company->id)>
-                                        {{ $company->name }}
-                                    </option>
-                                @endforeach
-                            </x-select-full>
-                        </div>
+                        @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
+                            <div class="w-full">
+                                <x-select-full name="company_id" id="company_id" label="{{ __('Empresa') }}"
+                                    defaultOption="Selecciona la empresa">
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}" @selected(old('company_id') == $company->id)>
+                                            {{ $company->name }}
+                                        </option>
+                                    @endforeach
+                                </x-select-full>
+                            </div>
+                        @endhasanyrole
                         <div class="w-full">
                             <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
                                 defaultOption="Selecciona la sede" required>
@@ -29,11 +31,8 @@
                                 @endforeach
                             </x-select-full>
                         </div>
-                    </div>
-
-                    <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                         <div class="w-full">
-                            <x-input-full id="name" name="name" label="{{ __('Nombre(s)') }}" required/>
+                            <x-input-full id="name" name="name" label="{{ __('Nombre(s)') }}" required />
                         </div>
                         <div class="w-full">
                             <x-input-full id="email" name="email" label="{{ __('Email') }}" required />

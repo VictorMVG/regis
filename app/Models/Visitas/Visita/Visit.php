@@ -15,6 +15,7 @@ class Visit extends Model
 
     protected $fillable = [
         'user_id',
+        'headquarter_id',
         'visitor_name',
         'company_name',
         'reason',
@@ -27,7 +28,15 @@ class Visit extends Model
         'unit_number',
         'unit_color_id',
         'comment',
-        'exit_time'
+        'exit_time',
+        'updated_by',
+        'exit_registered_by',
+    ];
+
+    protected $casts = [
+        'exit_time' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     //relacion uno a muchos inversa con la tabla unit_types
@@ -52,5 +61,17 @@ class Visit extends Model
     public function headquarter()
     {
         return $this->belongsTo(Headquarter::class);
+    }
+
+    //relacion uno a muchos inversa con la tabla users
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    //relacion uno a muchos inversa con la tabla users
+    public function exitRegisteredBy()
+    {
+        return $this->belongsTo(User::class, 'exit_registered_by');
     }
 }

@@ -15,30 +15,43 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('companies.index') }}" :active="request()->routeIs('companies.*')">
-                        {{ __('Companies') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('headquarters.index') }}" :active="request()->routeIs('headquarters.*')">
-                        {{ __('Headquarters') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
-                        {{ __('Users') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('permissions.index') }}" :active="request()->routeIs('permissions.*')">
-                        {{ __('Permissions') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('roles.index') }}" :active="request()->routeIs('roles.*')">
-                        {{ __('Roles') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('unit-colors.index') }}" :active="request()->routeIs('unit-colors.*')">
-                        {{ __('Unit colors') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('unit-types.index') }}" :active="request()->routeIs('unit-types.*')">
-                        {{ __('Unit types') }}
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
-                        {{ __('Visits') }}
-                    </x-nav-link>
+
+                    @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
+                        <x-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
+                            {{ __('Visits') }}
+                        </x-nav-link>
+                    @endhasanyrole
+
+                    @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE')
+                        <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                        <x-nav-link href="{{ route('headquarters.index') }}" :active="request()->routeIs('headquarters.*')">
+                            {{ __('Headquarters') }}
+                        </x-nav-link>
+                    @endhasanyrole
+
+                    @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
+                        <x-nav-link href="{{ route('companies.index') }}" :active="request()->routeIs('companies.*')">
+                            {{ __('Companies') }}
+                        </x-nav-link>
+                        <x-nav-link href="{{ route('unit-colors.index') }}" :active="request()->routeIs('unit-colors.*')">
+                            {{ __('Unit colors') }}
+                        </x-nav-link>
+                        <x-nav-link href="{{ route('unit-types.index') }}" :active="request()->routeIs('unit-types.*')">
+                            {{ __('Unit types') }}
+                        </x-nav-link>
+                    @endhasanyrole
+
+                    @hasanyrole('SUPER USUARIO')
+                        <x-nav-link href="{{ route('permissions.index') }}" :active="request()->routeIs('permissions.*')">
+                            {{ __('Permissions') }}
+                        </x-nav-link>
+                        <x-nav-link href="{{ route('roles.index') }}" :active="request()->routeIs('roles.*')">
+                            {{ __('Roles') }}
+                        </x-nav-link>
+                    @endhasanyrole
+
                 </div>
             </div>
 

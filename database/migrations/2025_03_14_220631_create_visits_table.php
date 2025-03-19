@@ -29,6 +29,8 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->timestamps();
             $table->timestamp('exit_time')->nullable();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('restrict');
+            $table->foreignId('exit_registered_by')->nullable()->constrained('users')->onDelete('restrict');
         });
     }
 

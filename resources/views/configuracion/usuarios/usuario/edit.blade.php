@@ -20,16 +20,18 @@
                                 @endforeach
                             </x-select-full>
                         </div>
-                        <div class="w-full">
-                            <x-select-full name="company_id" id="company_id" label="{{ __('Company') }}"
-                                defaultValue="{{ $user->company_id }}">
-                                @foreach ($companies as $company)
-                                    <option value="{{ $company->id }}" @selected(old('company_id', $user->company_id) == $company->id)>
-                                        {{ $company->name }}
-                                    </option>
-                                @endforeach
-                            </x-select-full>
-                        </div>
+                        @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
+                            <div class="w-full">
+                                <x-select-full name="company_id" id="company_id" label="{{ __('Company') }}"
+                                    defaultValue="{{ $user->company_id }}">
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}" @selected(old('company_id', $user->company_id) == $company->id)>
+                                            {{ $company->name }}
+                                        </option>
+                                    @endforeach
+                                </x-select-full>
+                            </div>
+                        @endhasanyrole
                         <div class="w-full">
                             <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
                                 defaultValue="{{ $user->headquarter_id }}" required>
@@ -39,7 +41,7 @@
                                     </option>
                                 @endforeach
                             </x-select-full>
-                        </div> 
+                        </div>
                     </div>
 
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
@@ -57,25 +59,27 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                        <div class="w-full">
-                            @if ($roles->count())
-                                <h3 class="text-sm font-medium text-gray-700 pt-5">{{ __('Roles asociados') }}</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 py-6 px-2">
-                                    @foreach ($roles as $role)
-                                        <div>
-                                            <label for="role_{{ $role->id }}" class="inline-flex items-center">
-                                                <input type="checkbox" id="role_{{ $role->id }}" name="roles[]"
-                                                    value="{{ $role->id }}" class="form-checkbox"
-                                                    {{ $user->roles->contains($role->id) ? 'checked' : '' }}>
-                                                <span class="ml-2">{{ $role->name }}</span>
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
+                    @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
+                        <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
+                            <div class="w-full">
+                                @if ($roles->count())
+                                    <h3 class="text-sm font-medium text-gray-700 pt-5">{{ __('Roles asociados') }}</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 py-6 px-2">
+                                        @foreach ($roles as $role)
+                                            <div>
+                                                <label for="role_{{ $role->id }}" class="inline-flex items-center">
+                                                    <input type="checkbox" id="role_{{ $role->id }}" name="roles[]"
+                                                        value="{{ $role->id }}" class="form-checkbox"
+                                                        {{ $user->roles->contains($role->id) ? 'checked' : '' }}>
+                                                    <span class="ml-2">{{ $role->name }}</span>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    @endhasanyrole
 
                 </div>
 

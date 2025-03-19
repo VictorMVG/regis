@@ -32,12 +32,28 @@ class HeadquarterController extends Controller
      */
     public function store(Request $request)
     {
+
+        //usuario autenticado
+        $user = auth()->user();
+
+        //validar que el usuario autenticado tenga company_id asignado
+        if (!$user->company_id) {
+            session()->flash('swal', json_encode([
+                'title' => 'Error',
+                'text' => 'No tienes una empresa asignada, por favor contacta al administrador para que te la asignen.',
+                'icon' => 'error',
+            ]));
+
+            return redirect()->route('headquarters.create');
+        }
+
         $request->validate([
-            'company_id' => 'required|integer|exists:companies,id',
+            'company_id' => 'nullable|integer|exists:companies,id',
             'name' => 'required|string|max:255|unique:headquarters,name,NULL,id,company_id,' . $request->company_id,
         ]);
 
         try {
+            $request->merge(['company_id' => $user->hasRole('ADMINISTRADOR DE SEDE') ? $user->company_id : $request->company_id]);
 
             Headquarter::create($request->all());
 
