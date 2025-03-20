@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Visitas\Visita;
 use App\Http\Controllers\Controller;
 use App\Models\Catalogos\UnitColor;
 use App\Models\Catalogos\UnitType;
+use App\Models\Configuracion\Catalogos\Status;
 use App\Models\Configuracion\Usuarios\Catalogos\Headquarter;
 use App\Models\Visitas\Visita\Visit;
 use Illuminate\Http\Request;
@@ -78,6 +79,20 @@ class VisitController extends Controller
         $validated['exit_time'] = null;
 
         try {
+
+            // Validar que el headquarter_id esté ACTIVO (A)
+            $headquarter = Headquarter::find($validated['headquarter_id']);
+
+            if (!$headquarter || $headquarter->status_id !== Status::where('name', 'ACTIVO (A)')->value('id')) {
+                session()->flash('swal', json_encode([
+                    'title' => 'Error',
+                    'text' => 'No puedes crear visitas para una sede inactiva. Contacta con tu administrador de sedes para que la active de nuevo.',
+                    'icon' => 'error',
+                ]));
+
+                return redirect()->route('visits.create');
+            }
+
             Visit::create($validated);
 
             session()->flash('swal', json_encode([
@@ -155,7 +170,6 @@ class VisitController extends Controller
             ]));
 
             return redirect()->route('dashboard');
-
         } catch (\Exception $e) {
             session()->flash('swal', json_encode([
                 'title' => 'Error',
