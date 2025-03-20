@@ -141,10 +141,35 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $authUser = auth()->user();
+
+        // Verificar si el usuario autenticado tiene el rol ADMINISTRADOR DE SEDE
+        if ($authUser->hasRole('ADMINISTRADOR DE SEDE')) {
+            // Verificar si el usuario relacionado tiene una sede y una empresa asociada
+            if (!$user->headquarter || !$user->headquarter->company || $authUser->company_id != $user->headquarter->company->id) {
+                abort(404); // Si no coincide la empresa o faltan relaciones, devolver error 404
+            }
+        };
+
+        // Validar que un usuario que no sea SUPER USUARIO no pueda editar a un SUPER USUARIO
+        if (!$authUser->hasRole('SUPER USUARIO') && $user->hasRole('SUPER USUARIO')) {
+            abort(404);
+        }
+
         $companies = Company::all();
         $statuses = Status::all();
         $roles = Role::where('name', '!=', 'SUPER USUARIO')->get();
-        $headquarters = Headquarter::with('company')->get();
+
+
+        if ($authUser->hasRole('ADMINISTRADOR DE SEDE')) {
+            $headquarters = Headquarter::with('company')
+                ->where('company_id', $authUser->company_id)
+                ->get();
+        } else {
+            // Si no tiene el rol ADMINISTRADOR DE SEDE, obtener todos los headquarters
+            $headquarters = Headquarter::with('company')->get();
+        };
+
 
         return view('configuracion.usuarios.usuario.edit', compact('user', 'companies', 'statuses', 'roles', 'headquarters'));
     }
@@ -154,9 +179,6 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // Usuario autenticado
-        $authUser = auth()->user();
-
         // Validar los datos del formulario
         $validatedData = $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
@@ -230,13 +252,35 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        DB::beginTransaction();
+        //usuari autenticado
+        $authUser = auth()->user();
+
+        // Validar que el usuario autenticado no se quiera eliminar a si mismo
+        if ($authUser->id == $user->id) {
+
+            session()->flash('swal', json_encode([
+                'title' => 'Error',
+                'text' => 'No puedes eliminarte a ti mismo',
+                'icon' => 'error',
+            ]));
+
+            return redirect()->route('users.index');
+        }
+
+        if (!$authUser->hasRole('SUPER USUARIO') && $user->hasRole('SUPER USUARIO')) {
+            session()->flash('swal', json_encode([
+                'title' => 'Error',
+                'text' => 'No tienes permiso para eliminar un SUPER USUARIO',
+                'icon' => 'error',
+            ]));
+
+            return redirect()->route('users.index');
+        }
 
         try {
+
             // Eliminar el usuario
             $user->delete();
-
-            DB::commit();
 
             session()->flash('swal', json_encode([
                 'title' => '!Bien hecho!',
@@ -244,7 +288,6 @@ class UserController extends Controller
                 'icon' => 'success',
             ]));
         } catch (\Exception $e) {
-            DB::rollBack();
 
             session()->flash('swal', json_encode([
                 'title' => 'Error',

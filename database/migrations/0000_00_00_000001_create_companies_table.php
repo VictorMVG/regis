@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('alias')->unique();
+            $table->string('alias')->nullable()->unique();
             $table->foreignId('status_id')->default(1)->constrained()->onDelete('restrict');
         });
     }

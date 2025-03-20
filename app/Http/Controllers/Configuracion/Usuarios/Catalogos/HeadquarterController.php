@@ -47,6 +47,8 @@ class HeadquarterController extends Controller
             return redirect()->route('headquarters.index');
         }
 
+        //validar que si el usuario autenticado tiene el rol ADMINISTRADOR DE SEDE
+
         $request->validate([
             'company_id' => 'nullable|integer|exists:companies,id',
             'name' => 'required|string|max:255|unique:headquarters,name,NULL,id,company_id,' . $request->company_id,
@@ -89,6 +91,12 @@ class HeadquarterController extends Controller
      */
     public function edit(Headquarter $headquarter)
     {
+        $user = auth()->user();
+
+        if ($user->hasRole('ADMINISTRADOR DE SEDE') && $headquarter->company_id != $user->company_id) {
+            abort(404);
+        }
+
         $statuses = Status::all();
         $companies = Company::all();
 
@@ -101,12 +109,16 @@ class HeadquarterController extends Controller
     public function update(Request $request, Headquarter $headquarter)
     {
         $request->validate([
-            'company_id' => 'required|integer|exists:companies,id',
-            'name' => 'required|string|max:255|unique:headquarters,name,' . $headquarter->id . ',id,company_id,' . $request->company_id,
+            'company_id' => 'nullable|integer|exists:companies,id',
+            'name' => 'required|string|max:255|unique:headquarters,name,' . $headquarter->id . ',id,company_id,' . ($request->company_id ?? $headquarter->company_id),
             'status_id' => 'required|exists:statuses,id',
         ]);
 
         try {
+            // Si company_id viene vacío, mantener el valor actual del registro
+            $request->merge([
+                'company_id' => $request->company_id ?? $headquarter->company_id,
+            ]);
 
             $headquarter->update($request->all());
 
@@ -118,7 +130,6 @@ class HeadquarterController extends Controller
 
             return redirect()->route('headquarters.index');
         } catch (\Exception $e) {
-
             session()->flash('swal', json_encode([
                 'title' => 'Error',
                 'text' => 'Hubo un problema al actualizar la sede.',
@@ -145,7 +156,6 @@ class HeadquarterController extends Controller
             ]));
 
             return redirect()->route('headquarters.index');
-            
         } catch (\Exception $e) {
 
             session()->flash('swal', json_encode([

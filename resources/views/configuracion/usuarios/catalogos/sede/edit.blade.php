@@ -2,14 +2,16 @@
     <x-form-full title="{{ __('Editing:') }} {{ $headquarter->name }} de {{ $headquarter->company->name }}" method="PUT"
         action="{{ route('headquarters.update', $headquarter) }}" buttonText="{{ __('Update') }}">
 
-        <x-select-full name="company_id" id="company_id" label="{{ __('Company') }}"
-            defaultValue="{{ $headquarter->company_id }}">
-            @foreach ($companies as $company)
-                <option value="{{ $company->id }}" @selected(old('company_id', $headquarter->company_id) == $company->id)>
-                    {{ $company->name }}
-                </option>
-            @endforeach
-        </x-select-full>
+        @hasanyrole('SUPER USUARIO')
+            <x-select-full name="company_id" id="company_id" label="{{ __('Company') }}"
+                defaultValue="{{ $headquarter->company_id }}">
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}" @selected(old('company_id', $headquarter->company_id) == $company->id)>
+                        {{ $company->name }}
+                    </option>
+                @endforeach
+            </x-select-full>
+        @endhasanyrole
 
         <x-input-full id="name" name="name" label="{{ __('Name') }}" defaultValue="{{ $headquarter->name }}"
             required />

@@ -39,13 +39,21 @@ class User extends Component
             });
 
         // Aplicar filtros según el rol del usuario autenticado
-        if ($authUser->hasRole('ADMINISTRADOR DE SEDE')) {
+        if ($authUser->hasRole('SUPER USUARIO')) {
+            // El SUPER USUARIO puede ver todos los registros, incluidos los usuarios con el rol SUPER USUARIO
+            $usersQuery;
+        } elseif ($authUser->hasRole('ADMINISTRADOR DE SEDE')) {
             // Filtrar usuarios por el company_id relacionado con visits->headquarter->company->id
             $usersQuery->whereHas('headquarter.company', function ($query) use ($authUser) {
                 $query->where('id', $authUser->company_id);
             });
         } elseif (!$authUser->hasRole('SUPER USUARIO') && !$authUser->hasRole('ADMINISTRADOR GENERAL')) {
             // Si no es SUPER USUARIO ni ADMINISTRADOR GENERAL, excluir usuarios con el rol SUPER USUARIO
+            $usersQuery->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'SUPER USUARIO');
+            });
+        } else {
+            // Para ADMINISTRADOR GENERAL, excluir usuarios con el rol SUPER USUARIO
             $usersQuery->whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'SUPER USUARIO');
             });

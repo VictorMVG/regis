@@ -14,12 +14,12 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Today visits') }}
                     </x-nav-link>
 
                     @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
                         <x-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
-                            {{ __('Visits') }}
+                            {{ __('All visits') }}
                         </x-nav-link>
                     @endhasanyrole
 
@@ -195,7 +195,7 @@
 
             @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
                 <x-responsive-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
-                    {{ __('Visits') }}
+                    {{ __('All visits') }}
                 </x-responsive-nav-link>
             @endhasanyrole
 
