@@ -28,16 +28,18 @@
             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 px-2 py-1">
 
             <!-- Add Buttons -->
-            <a href="{{ route('visits.create') }}">
-                <x-button type="button" color="green">
-                    <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    {{ __('Add') }}
-                </x-button>
-            </a>
+            @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA')
+                <a href="{{ route('visits.create') }}">
+                    <x-button type="button" color="green">
+                        <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        {{ __('Add') }}
+                    </x-button>
+                </a>
+            @endhasanyrole
 
         </div>
 
@@ -120,7 +122,10 @@
                         <td class="px-4 py-2 flex items-center justify-center relative" x-data="{ open: {}, up: false }">
 
                             <!-- Ícono para actualizar exit_time -->
-                            @if (!$visit->exit_time && auth()->user()->hasAnyRole(['SUPER USUARIO', 'GUARDIA']) && $visit->created_at->isToday())
+                            @if (
+                                !$visit->exit_time &&
+                                    auth()->user()->hasAnyRole(['SUPER USUARIO', 'GUARDIA']) &&
+                                    $visit->created_at->isToday())
                                 <form action="{{ route('visits.updateExitTime', $visit->id) }}" method="POST"
                                     class="ml-2">
                                     @csrf

@@ -45,6 +45,9 @@ class Dashboard extends Component
         } elseif ($user->hasRole('GUARDIA')) {
             // Filtra por el headquarter_id relacionado con el usuario
             $query->where('headquarter_id', $user->headquarter_id);
+        } else {
+            // Si el usuario no tiene ninguno de los roles especificados, devuelve una consulta vacía
+            $query->whereRaw('1 = 0'); // Esto asegura que no se devuelvan registros
         }
 
         // Aplica búsqueda en múltiples campos

@@ -409,6 +409,8 @@
     "Unit plate": "Placa del vehículo",
     "Unit model": "Modelo del vehículo",
     "Unit number": "Número económico",
+    "Company custom": "Si quieres que administre las sedes de una empresa selecciona  de cual empresa",
+    "Headquarter custom": "Si quieres que tenga funciones de guardia selecciona la sede a la que estará asignado",
     "USUARIO": "____________________________________________________________________________________",
     "Users": "Usuarios"
 

@@ -11,7 +11,7 @@
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                         @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
                             <div class="w-full">
-                                <x-select-full name="company_id" id="company_id" label="{{ __('Empresa') }}"
+                                <x-select-full name="company_id" id="company_id" label="{{ __('Company custom') }}"
                                     defaultOption="Selecciona la empresa">
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}" @selected(old('company_id') == $company->id)>
@@ -22,8 +22,8 @@
                             </div>
                         @endhasanyrole
                         <div class="w-full">
-                            <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
-                                defaultOption="Selecciona la sede" @hasrole('ADMINISTRADOR DE SEDE') required @endhasrole>
+                            <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter custom') }}"
+                                defaultOption="Selecciona la sede">
                                 @foreach ($headquarters as $headquarter)
                                     <option value="{{ $headquarter->id }}" @selected(old('headquarter_id') == $headquarter->id)>
                                         {{ $headquarter->company->name }} - {{ $headquarter->name }}
@@ -31,6 +31,8 @@
                                 @endforeach
                             </x-select-full>
                         </div>
+                    </div>
+                    <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                         <div class="w-full">
                             <x-input-full id="name" name="name" label="{{ __('Nombre(s)') }}" required />
                         </div>

@@ -57,8 +57,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
-            'company_id' => ['exists:companies,id'],
-            'headquarter_id' => ['required', 'exists:headquarters,id'],
+            'company_id' => ['nullable', 'exists:companies,id'], // company_id puede ser nulo
+            'headquarter_id' => ['nullable', 'exists:headquarters,id'], // headquarter_id puede ser nulo
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
@@ -68,31 +68,44 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-
+            // Crear los estados si no existen
             if (Status::count() == 0) {
                 Status::firstOrCreate(['name' => 'ACTIVO (A)']);
                 Status::firstOrCreate(['name' => 'INACTIVO (A)']);
             }
 
+            // Crear el usuario
             $user = User::create([
-                'company_id' => $request['company_id'],
-                'headquarter_id' => $request['headquarter_id'],
+                'company_id' => $request->input('company_id'),
+                'headquarter_id' => $request->input('headquarter_id'),
                 'status_id' => Status::where('name', 'ACTIVO (A)')->first()->id,
-                'name' => $request['name'],
-                'email' => $request['email'],
-                'password' => Hash::make($request['password']),
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
             ]);
 
-            if (User::count() == 1) {
-                // Crear el rol ADMIN si no existe
-                $adminRole = Role::firstOrCreate(['name' => 'SUPER USUARIO']);
-                // Asignar el rol ADMIN al primer usuario
-                $user->assignRole($adminRole);
-            } else {
-                // Crear el rol GUARDIA si no existe
+            // Asignar roles según los valores de company_id y headquarter_id
+            $rolesToAssign = [];
+
+            if ($request->filled('company_id')) {
+                // Si tiene company_id, asignar el rol ADMINISTRADOR DE SEDE
+                $adminSedeRole = Role::firstOrCreate(['name' => 'ADMINISTRADOR DE SEDE']);
+                $rolesToAssign[] = $adminSedeRole->id;
+            }
+
+            if ($request->filled('headquarter_id')) {
+                // Si tiene headquarter_id, asignar el rol GUARDIA
                 $guardRole = Role::firstOrCreate(['name' => 'GUARDIA']);
-                // Asignar el rol GUARDIA al nuevo usuario
-                $user->assignRole($guardRole);
+                $rolesToAssign[] = $guardRole->id;
+            }
+
+            // Asignar los roles al usuario
+            if (!empty($rolesToAssign)) {
+                $user->roles()->sync($rolesToAssign);
+            } else {
+                // Si no tiene company_id ni headquarter_id, asignar un rol predeterminado (opcional)
+                $defaultRole = Role::firstOrCreate(['name' => 'SIN ROL ASIGNADO']);
+                $user->assignRole($defaultRole);
             }
 
             DB::commit();
