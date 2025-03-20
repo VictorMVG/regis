@@ -36,15 +36,15 @@ class HeadquarterController extends Controller
         //usuario autenticado
         $user = auth()->user();
 
-        //validar que el usuario autenticado tenga company_id asignado
-        if (!$user->company_id) {
+        //validar que el usuario autenticado tenga company_id asignado si su rol es ADMINISTRADOR DE SEDE
+        if ($user->hasRole('ADMINISTRADOR DE SEDE') && !$user->company_id) {
             session()->flash('swal', json_encode([
                 'title' => 'Error',
-                'text' => 'No tienes una empresa asignada, por favor contacta al administrador para que te la asignen.',
+                'text' => 'No tienes una empresa asignada, contacta al administrador del sistema.',
                 'icon' => 'error',
             ]));
 
-            return redirect()->route('headquarters.create');
+            return redirect()->route('headquarters.index');
         }
 
         $request->validate([

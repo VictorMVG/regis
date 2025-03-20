@@ -13,7 +13,7 @@
 
         <x-input-full id="name" name="name" label="{{ __('Name') }}" required />
 
-        <x-textarea-full id="description" name="description" label="{{ __('Descripción') }}" required />
+        <x-textarea-full id="description" name="description" label="{{ __('Descripción') }}" />
 
     </x-form-full>
 

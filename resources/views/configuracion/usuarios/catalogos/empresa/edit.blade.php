@@ -6,7 +6,7 @@
             required />
 
         <x-input-full id="alias" name="alias" label="{{ __('Abreviation') }}"
-            defaultValue="{{ $company->alias }}" required />
+            defaultValue="{{ $company->alias }}" />
 
         <x-select-full name="status_id" id="status_id" label="{{ __('Status') }}"
             defaultValue="{{ $company->status_id }}" required>

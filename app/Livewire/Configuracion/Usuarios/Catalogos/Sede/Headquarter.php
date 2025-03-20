@@ -43,7 +43,7 @@ class Headquarter extends Component
 
         // Ordenar y paginar los resultados
         $headquarters = $headquartersQuery
-            ->orderBy('id')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
         return view('livewire.configuracion.usuarios.catalogos.sede.headquarter', compact('headquarters'));

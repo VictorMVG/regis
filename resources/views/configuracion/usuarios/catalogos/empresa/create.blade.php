@@ -4,7 +4,7 @@
 
         <x-input-full id="name" name="name" label="{{ __('Name') }}" required/>
 
-        <x-input-full id="alias" name="alias" label="{{ __('Abreviation') }}" required/>
+        <x-input-full id="alias" name="alias" label="{{ __('Abreviation') }}"/>
 
     </x-form-full>
 

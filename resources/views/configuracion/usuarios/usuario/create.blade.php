@@ -23,7 +23,7 @@
                         @endhasanyrole
                         <div class="w-full">
                             <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
-                                defaultOption="Selecciona la sede" required>
+                                defaultOption="Selecciona la sede" @hasrole('ADMINISTRADOR DE SEDE') required @endhasrole>
                                 @foreach ($headquarters as $headquarter)
                                     <option value="{{ $headquarter->id }}" @selected(old('headquarter_id') == $headquarter->id)>
                                         {{ $headquarter->company->name }} - {{ $headquarter->name }}
