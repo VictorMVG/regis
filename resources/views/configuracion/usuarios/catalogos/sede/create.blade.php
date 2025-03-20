@@ -3,7 +3,7 @@
         action="{{ route('headquarters.store') }}" buttonText="{{ __('Save') }}">
 
         @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
-            <x-select-full name="company_id" id="company_id" label="{{ __('Empresa') }}" defaultOption="Selecciona la empresa">
+            <x-select-full name="company_id" id="company_id" label="{{ __('Empresa') }}" defaultOption="Selecciona la empresa" required>
                 @foreach ($companies as $company)
                     <option value="{{ $company->id }}" @selected(old('company_id') == $company->id)>
                         {{ $company->name }}</option>

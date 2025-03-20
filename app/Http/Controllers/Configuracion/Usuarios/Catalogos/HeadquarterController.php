@@ -23,7 +23,11 @@ class HeadquarterController extends Controller
      */
     public function create()
     {
-        $companies = Company::all();
+        // Obtener el ID del estado "ACTIVO (A)"
+        $activeStatusId = Status::where('name', 'ACTIVO (A)')->value('id');
+
+        $companies = Company::where('status_id', $activeStatusId)->get();
+
         return view('configuracion.usuarios.catalogos.sede.create', compact('companies'));
     }
 
@@ -97,8 +101,11 @@ class HeadquarterController extends Controller
             abort(404);
         }
 
+        // Obtener el ID del estado "ACTIVO (A)"
+        $activeStatusId = Status::where('name', 'ACTIVO (A)')->value('id');
+
         $statuses = Status::all();
-        $companies = Company::all();
+        $companies = Company::where('status_id', $activeStatusId)->get();
 
         return view('configuracion.usuarios.catalogos.sede.edit', compact('headquarter', 'statuses', 'companies'));
     }

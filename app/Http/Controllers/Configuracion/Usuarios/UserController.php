@@ -35,17 +35,23 @@ class UserController extends Controller
         // usuario autenticado
         $user = auth()->user();
 
-        $companies = Company::all();
+        // Obtener el ID del estado "ACTIVO (A)"
+        $activeStatusId = Status::where('name', 'ACTIVO (A)')->value('id');
+
+        $companies = Company::where('status_id', $activeStatusId)->get();
 
         // Verificar si el usuario tiene el rol ADMINISTRADOR DE SEDE
         if ($user->hasRole('ADMINISTRADOR DE SEDE')) {
             // Filtrar los headquarters por el company_id del usuario autenticado
             $headquarters = Headquarter::with('company')
                 ->where('company_id', $user->company_id)
+                ->where('status_id', $activeStatusId)
                 ->get();
         } else {
             // Si no tiene el rol ADMINISTRADOR DE SEDE, obtener todos los headquarters
-            $headquarters = Headquarter::with('company')->get();
+            $headquarters = Headquarter::with('company')
+                ->where('status_id', $activeStatusId)
+                ->get();
         }
 
         return view('configuracion.usuarios.usuario.create', compact('companies', 'headquarters'));
@@ -143,6 +149,9 @@ class UserController extends Controller
     {
         $authUser = auth()->user();
 
+         // Obtener el ID del estado "ACTIVO (A)"
+         $activeStatusId = Status::where('name', 'ACTIVO (A)')->value('id');
+
         // Verificar si el usuario autenticado tiene el rol ADMINISTRADOR DE SEDE
         if ($authUser->hasRole('ADMINISTRADOR DE SEDE')) {
             // Verificar si el usuario relacionado tiene una sede y una empresa asociada
@@ -156,7 +165,7 @@ class UserController extends Controller
             abort(404);
         }
 
-        $companies = Company::all();
+        $companies = Company::where('status_id', $activeStatusId)->get();
         $statuses = Status::all();
         $roles = Role::where('name', '!=', 'SUPER USUARIO')->get();
 
@@ -164,10 +173,12 @@ class UserController extends Controller
         if ($authUser->hasRole('ADMINISTRADOR DE SEDE')) {
             $headquarters = Headquarter::with('company')
                 ->where('company_id', $authUser->company_id)
+                ->where('status_id', $activeStatusId)
                 ->get();
         } else {
             // Si no tiene el rol ADMINISTRADOR DE SEDE, obtener todos los headquarters
-            $headquarters = Headquarter::with('company')->get();
+            $headquarters = Headquarter::where('status_id', $activeStatusId)
+            ->with('company')->get();
         };
 
 
