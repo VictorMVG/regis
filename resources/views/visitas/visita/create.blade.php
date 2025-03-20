@@ -12,7 +12,7 @@
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                         @if (auth()->user()->hasRole('SUPER USUARIO|ADMINISTRADOR GENERAL'))
                         <div class="w-full">
-                            <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Unit color') }}"
+                            <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
                                 defaultOption="Selecciona una sede">
                                 @foreach ($headquarters as $headquarter)
                                     <option value="{{ $headquarter->id }}" @selected(old('headquarter_id') == $headquarter->id)>
@@ -44,7 +44,7 @@
                     <div x-data="{ alcoholTest: false, unit: false }">
                         <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                             <div class="w-full">
-                                <input type="hidden" name="alcohol_test" value="0">
+                                <input type="hidden" name="alcohol_test" :value="alcoholTest ? 1 : 0">
                                 <x-toggle-full id="alcohol_test" name="alcohol_test" label="{{ __('Alcohol test') }}"
                                     size="large" onColor="red" offColor="gray" x-model="alcoholTest" />
                                 <p class="mt-2 text-sm font-medium">
@@ -58,7 +58,7 @@
                                 </p>
                             </div>
                             <div class="w-full">
-                                <input type="hidden" name="unit" value="0">
+                                <input type="hidden" name="unit" :value="unit ? 1 : 0">
                                 <x-toggle-full id="unit" name="unit" label="{{ __('Unit') }}" size="large"
                                     onColor="green" offColor="gray" x-model="unit" />
                                 <p class="mt-2 text-sm font-medium">

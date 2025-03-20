@@ -41,17 +41,6 @@ class VisitController extends Controller
         //usuario autenticado
         $user = Auth::user();
 
-        //validar que el usuario autenticado tenga una sede asignada
-        if (!$user->headquarter_id) {
-            session()->flash('swal', json_encode([
-                'title' => 'Error',
-                'text' => 'No tienes una sede asignada, por favor contacta al administrador para que te la asignen.',
-                'icon' => 'error',
-            ]));
-
-            return redirect()->route('visits.create');
-        }
-
         $data = $request->all();
 
         // Convertir los valores de "on" a booleanos
@@ -92,7 +81,7 @@ class VisitController extends Controller
 
                 return redirect()->route('visits.create');
             }
-
+            
             Visit::create($validated);
 
             session()->flash('swal', json_encode([
@@ -137,7 +126,66 @@ class VisitController extends Controller
      */
     public function update(Request $request, Visit $visit)
     {
-        //
+        // Usuario autenticado
+        $user = Auth::user();
+
+        $data = $request->all();
+
+        // Convertir los valores de "on" a booleanos
+        $data['alcohol_test'] = $request->has('alcohol_test') && $request->alcohol_test === 'on' ? true : false;
+        $data['unit'] = $request->has('unit') && $request->unit === '1' ? true : false;
+
+        $validated = Validator::make($data, [
+            'headquarter_id' => 'nullable|exists:headquarters,id',
+            'visitor_name' => 'required|string|max:255',
+            'company_name' => 'required|string|max:255',
+            'reason' => 'required|string|max:255',
+            'to_see' => 'required|string|max:255',
+            'alcohol_test' => 'required|boolean',
+            'unit' => 'required|boolean',
+            'unit_plate' => 'nullable|string|max:255',
+            'unit_model' => 'nullable|string|max:255',
+            'unit_number' => 'nullable|string|max:255',
+            'unit_type_id' => 'nullable|exists:unit_types,id',
+            'unit_color_id' => 'nullable|exists:unit_colors,id',
+            'comment' => 'nullable|string',
+        ])->validate();
+
+        $validated['headquarter_id'] = $user->hasRole('GUARDIA') ? $user->headquarter_id : $validated['headquarter_id'];
+
+        try {
+            // Validar que el headquarter_id esté ACTIVO (A)
+            $headquarter = Headquarter::find($validated['headquarter_id']);
+
+            if (!$headquarter || $headquarter->status_id !== Status::where('name', 'ACTIVO (A)')->value('id')) {
+                session()->flash('swal', json_encode([
+                    'title' => 'Error',
+                    'text' => 'No puedes actualizar visitas para una sede inactiva. Contacta con tu administrador de sedes para que la active de nuevo.',
+                    'icon' => 'error',
+                ]));
+
+                return redirect()->route('visits.edit', $visit->id);
+            }
+
+            // Actualizar el registro
+            $visit->update($validated);
+
+            session()->flash('swal', json_encode([
+                'title' => '!Bien hecho!',
+                'text' => 'Visita actualizada correctamente',
+                'icon' => 'success',
+            ]));
+
+            return redirect()->route('dashboard');
+        } catch (\Exception $e) {
+            session()->flash('swal', json_encode([
+                'title' => 'Error',
+                'text' => 'Hubo un problema al actualizar la visita. ' . $e->getMessage(),
+                'icon' => 'error',
+            ]));
+        }
+
+        return redirect()->route('dashboard');
     }
 
     /**
