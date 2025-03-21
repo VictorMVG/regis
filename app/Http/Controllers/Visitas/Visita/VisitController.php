@@ -43,9 +43,9 @@ class VisitController extends Controller
 
         $data = $request->all();
 
-        // Convertir los valores de "on" a booleanos
-        $data['alcohol_test'] = $request->has('alcohol_test') && $request->alcohol_test === 'on' ? true : false;
-        $data['unit'] = $request->has('unit') && $request->unit === '1' ? true : false;
+        // Convertir los valores de los toggles a booleanos
+        $data['alcohol_test'] = filter_var($request->input('alcohol_test'), FILTER_VALIDATE_BOOLEAN);
+        $data['unit'] = filter_var($request->input('unit'), FILTER_VALIDATE_BOOLEAN);
 
         $validated = Validator::make($data, [
             'headquarter_id' => 'nullable|exists:headquarters,id',
@@ -67,6 +67,15 @@ class VisitController extends Controller
         $validated['headquarter_id'] = $user->hasRole('GUARDIA') ? $user->headquarter_id : $validated['headquarter_id'];
         $validated['exit_time'] = null;
 
+        // Si el toggle "unit" es falso, limpiar los campos relacionados con el vehículo
+        if (!$validated['unit']) {
+            $validated['unit_plate'] = null;
+            $validated['unit_model'] = null;
+            $validated['unit_number'] = null;
+            $validated['unit_type_id'] = null;
+            $validated['unit_color_id'] = null;
+        }
+
         try {
 
             // Validar que el headquarter_id esté ACTIVO (A)
@@ -81,7 +90,7 @@ class VisitController extends Controller
 
                 return redirect()->route('visits.create');
             }
-            
+
             Visit::create($validated);
 
             session()->flash('swal', json_encode([
@@ -131,9 +140,9 @@ class VisitController extends Controller
 
         $data = $request->all();
 
-        // Convertir los valores de "on" a booleanos
-        $data['alcohol_test'] = $request->has('alcohol_test') && $request->alcohol_test === 'on' ? true : false;
-        $data['unit'] = $request->has('unit') && $request->unit === '1' ? true : false;
+        // Convertir los valores de los toggles a booleanos
+        $data['alcohol_test'] = filter_var($request->input('alcohol_test'), FILTER_VALIDATE_BOOLEAN);
+        $data['unit'] = filter_var($request->input('unit'), FILTER_VALIDATE_BOOLEAN);
 
         $validated = Validator::make($data, [
             'headquarter_id' => 'nullable|exists:headquarters,id',
@@ -152,6 +161,15 @@ class VisitController extends Controller
         ])->validate();
 
         $validated['headquarter_id'] = $user->hasRole('GUARDIA') ? $user->headquarter_id : $validated['headquarter_id'];
+
+        // Si el toggle "unit" es falso, limpiar los campos relacionados con el vehículo
+        if (!$validated['unit']) {
+            $validated['unit_plate'] = null;
+            $validated['unit_model'] = null;
+            $validated['unit_number'] = null;
+            $validated['unit_type_id'] = null;
+            $validated['unit_color_id'] = null;
+        }
 
         try {
             // Validar que el headquarter_id esté ACTIVO (A)

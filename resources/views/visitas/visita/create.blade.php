@@ -41,7 +41,7 @@
                         </div>
                     </div>
 
-                    <div x-data="{ alcoholTest: false, unit: false }">
+                    <div x-data="{ alcoholTest: false, unit: true }">
                         <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                             <div class="w-full">
                                 <input type="hidden" name="alcohol_test" :value="alcoholTest ? 1 : 0">

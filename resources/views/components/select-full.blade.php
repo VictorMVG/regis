@@ -11,8 +11,8 @@
     @if($label)
         <x-label for="{{ $name }}" :value="$label" />
     @endif
-    <select {{ $attributes->merge(['name' => $name, 'id' => $name, 'class' => $defaultClass . ' ' . $errorClass]) }} :value="old($name)">
-        <option value="" selected disabled hidden>{{ $defaultOption }}</option>
+    <select {{ $attributes->merge(['name' => $name, 'id' => $name, 'class' => $defaultClass . ' ' . $errorClass]) }}>
+        <option value="" @if(!old($name)) selected @endif>{{ $defaultOption }}</option>
         {{ $slot }}
     </select>
 </div>
