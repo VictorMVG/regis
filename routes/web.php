@@ -130,7 +130,7 @@ Route::middleware([
     // ------------------------------
     // Rutas para Visitas
     // ------------------------------
-    Route::get('visitas', [VisitController::class, 'index'])->name('visits.index')->middleware('role:SUPER USUARIO||ADMINISTRADOR GENERAL');
+    Route::get('visitas', [VisitController::class, 'index'])->name('visits.index')->middleware('role:SUPER USUARIO||ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::get('visitas/create', [VisitController::class, 'create'])->name('visits.create')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
     Route::post('visitas', [VisitController::class, 'store'])->name('visits.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
     Route::get('visitas/{visit}', [VisitController::class, 'show'])->name('visits.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
@@ -140,5 +140,5 @@ Route::middleware([
     Route::patch('/visits/{visit}/exit-time', [VisitController::class, 'updateExitTime'])->name('visits.updateExitTime')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
     Route::get('/visits/export', [VisitController::class, 'export'])->name('visits.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::get('/visits/export-filtered', [VisitController::class, 'exportFiltered'])->name('visits.exportFiltered');
-    
+
 });

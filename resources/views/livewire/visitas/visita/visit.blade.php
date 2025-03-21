@@ -40,6 +40,7 @@
                 </x-button>
             @endhasanyrole
 
+            @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA')
             <!-- Add Buttons -->
             <a href="{{ route('visits.create') }}">
                 <x-button type="button" color="green">
@@ -51,7 +52,8 @@
                     {{ __('Add') }}
                 </x-button>
             </a>
-
+            @endhasanyrole
+            
         </div>
 
     </div>

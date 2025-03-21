@@ -17,7 +17,7 @@
                         {{ __('Today visits') }}
                     </x-nav-link>
 
-                    @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
+                    @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE')
                         <x-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
                             {{ __('All visits') }}
                         </x-nav-link>
