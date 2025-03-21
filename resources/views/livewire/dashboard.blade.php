@@ -124,7 +124,7 @@
                             <!-- Ícono para actualizar exit_time -->
                             @if (
                                 !$visit->exit_time &&
-                                    auth()->user()->hasAnyRole(['SUPER USUARIO', 'GUARDIA']) &&
+                                    auth()->user()->hasAnyRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL', 'ADMINISTRADOR DE SEDE', 'GUARDIA']) &&
                                     $visit->created_at->isToday())
                                 <form action="{{ route('visits.updateExitTime', $visit->id) }}" method="POST"
                                     class="ml-2">
@@ -142,7 +142,7 @@
                                 </form>
                             @endif
 
-                            @if (auth()->user()->hasAnyRole(['SUPER USUARIO', 'ADMINISTRADOR DE SEDE', 'ADMINISTRADOR GENERAL']))
+                            @if (auth()->user()->hasAnyRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL']))
                                 <x-action-td :id="$visit->id" :routes="[
                                     ['name' => 'Edit', 'route' => 'visits.edit'],
                                     ['name' => 'Destroy', 'route' => 'visits.destroy', 'method' => 'DELETE'],
