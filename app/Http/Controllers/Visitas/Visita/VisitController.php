@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Visitas\Visita;
 
 use App\Exports\VisitsExport;
+use App\Exports\VisitsFilteredExport;
 use App\Http\Controllers\Controller;
 use App\Models\Catalogos\UnitColor;
 use App\Models\Catalogos\UnitType;
@@ -266,5 +267,13 @@ class VisitController extends Controller
         }
 
         return Excel::download(new VisitsExport, $fileName);
+    }
+
+    public function exportFiltered(Request $request)
+    {
+        $search = $request->input('search'); // Obtener el filtro de búsqueda
+
+        // Pasar los filtros a la clase de exportación
+        return Excel::download(new VisitsFilteredExport($search), 'visitas_filtradas.xlsx');
     }
 }

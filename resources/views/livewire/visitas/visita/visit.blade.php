@@ -27,6 +27,19 @@
         <div
             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 px-2 py-1">
 
+            @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE')
+                <x-button type="button" color="green" wire:click="export">
+                    <svg class="h-5 w-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M6.609 2.013A8.295 8.295 0 0 1 12 0c4.035 0 7.382 3 7.749 6.869C22.137 7.207 24 9.205 24 11.659 24 14.353 21.753 16.5 19.03 16.5H15a.75.75 0 0 1 0-1.5h4.032C20.968 15 22.5 13.482 22.5 11.659c0-1.824-1.532-3.342-3.468-3.342h-.75v-.75C18.282 4.238 15.492 1.5 12 1.5a6.795 6.795 0 0 0-4.412 1.65c-1.136.978-1.73 2.157-1.73 3.083v.672l-.668.073C3.096 7.207 1.5 8.928 1.5 11.007 1.5 13.178 3.345 15 5.672 15H9a.75.75 0 0 1 0 1.5H5.672C2.562 16.5 0 13.95 0 11.007c0-2.645 1.899-4.835 4.413-5.39.215-1.295 1.047-2.585 2.196-3.604z" />
+                        <path
+                            d="M11.469 23.781a.75.75 0 0 0 1.062 0l4.5-4.5a.75.75 0 0 0-1.062-1.062L12.75 21.44V8.25a.75.75 0 0 0-1.5 0v13.19l-3.219-3.22a.75.75 0 0 0-1.062 1.062z" />
+                    </svg>
+                    {{ __('DESCARGAR EXCEL') }}
+                </x-button>
+            @endhasanyrole
+
             <!-- Add Buttons -->
             <a href="{{ route('visits.create') }}">
                 <x-button type="button" color="green">
@@ -120,7 +133,10 @@
                         <td class="px-4 py-2 flex items-center justify-center relative" x-data="{ open: {}, up: false }">
 
                             <!-- Ícono para actualizar exit_time -->
-                            @if (!$visit->exit_time && auth()->user()->hasAnyRole(['SUPER USUARIO', 'GUARDIA']) && $visit->created_at->isToday())
+                            @if (
+                                !$visit->exit_time &&
+                                    auth()->user()->hasAnyRole(['SUPER USUARIO', 'GUARDIA']) &&
+                                    $visit->created_at->isToday())
                                 <form action="{{ route('visits.updateExitTime', $visit->id) }}" method="POST"
                                     class="ml-2">
                                     @csrf
