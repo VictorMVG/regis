@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Visitas\Visita;
 
+use App\Exports\VisitsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Catalogos\UnitColor;
 use App\Models\Catalogos\UnitType;
@@ -11,6 +12,7 @@ use App\Models\Visitas\Visita\Visit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VisitController extends Controller
 {
@@ -245,5 +247,24 @@ class VisitController extends Controller
         }
 
         return redirect()->route('dashboard');
+    }
+
+    public function export()
+    {
+        $user = Auth::user(); // Usuario autenticado
+        $timestamp = now()->format('d-m-Y_H-i'); // Fecha y hora actual en formato dd-mm-aaaa_hh-mm
+        $fileName = '';
+
+        // Construir el nombre del archivo según el rol
+        if ($user->hasRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL'])) {
+            $fileName = "visitas_diarias_de_todas_las_sedes_{$timestamp}.xlsx";
+        } elseif ($user->hasRole('ADMINISTRADOR DE SEDE')) {
+            $companyName = $user->company->name; // Relación con la compañía
+            $fileName = "visitas_diarias_de_{$companyName}_todas_las_sedes_{$timestamp}.xlsx";
+        } else {
+            $fileName = "visitas_diarias_{$timestamp}.xlsx"; // Nombre genérico para otros roles
+        }
+
+        return Excel::download(new VisitsExport, $fileName);
     }
 }

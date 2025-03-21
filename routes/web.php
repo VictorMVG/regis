@@ -138,5 +138,6 @@ Route::middleware([
     Route::put('visitas/{visit}', [VisitController::class, 'update'])->name('visits.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::delete('visitas/{visit}', [VisitController::class, 'destroy'])->name('visits.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::patch('/visits/{visit}/exit-time', [VisitController::class, 'updateExitTime'])->name('visits.updateExitTime')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
+    Route::get('/visits/export', [VisitController::class, 'export'])->name('visits.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
 
 });
