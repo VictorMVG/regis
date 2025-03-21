@@ -88,7 +88,7 @@ class VisitController extends Controller
                     'icon' => 'error',
                 ]));
 
-                return redirect()->route('visits.create');
+                return redirect()->route('visits.create')->withInput();
             }
 
             Visit::create($validated);

@@ -11,16 +11,16 @@
 
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                         @if (auth()->user()->hasRole('SUPER USUARIO|ADMINISTRADOR GENERAL'))
-                        <div class="w-full">
-                            <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
-                                defaultOption="Selecciona una sede">
-                                @foreach ($headquarters as $headquarter)
-                                    <option value="{{ $headquarter->id }}" @selected(old('headquarter_id') == $headquarter->id)>
-                                        {{ $headquarter->company->name }} - {{ $headquarter->name }}
-                                    </option>
-                                @endforeach
-                            </x-select-full>
-                        </div>
+                            <div class="w-full">
+                                <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
+                                    defaultOption="Selecciona una sede">
+                                    @foreach ($headquarters as $headquarter)
+                                        <option value="{{ $headquarter->id }}" @selected(old('headquarter_id') == $headquarter->id)>
+                                            {{ $headquarter->company->name }} - {{ $headquarter->name }}
+                                        </option>
+                                    @endforeach
+                                </x-select-full>
+                            </div>
                         @endif
                         <div class="w-full">
                             <x-input-full id="visitor_name" name="visitor_name" label="{{ __('Visitor name') }}"
@@ -77,19 +77,22 @@
                         <div x-show="unit" x-cloak class="pt-5">
                             <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                                 <div class="w-full">
-                                    <x-input-full id="unit_plate" name="unit_plate" label="{{ __('Unit plate') }}" />
+                                    <x-input-full id="unit_plate" name="unit_plate" label="{{ __('Unit plate') }}"
+                                    x-bind:required="unit" />
                                 </div>
                                 <div class="w-full">
-                                    <x-input-full id="unit_model" name="unit_model" label="{{ __('Unit model') }}" />
+                                    <x-input-full id="unit_model" name="unit_model" label="{{ __('Unit model') }}"
+                                    x-bind:required="unit" />
                                 </div>
                                 <div class="w-full">
-                                    <x-input-full id="unit_number" name="unit_number" label="{{ __('Unit number') }}" />
+                                    <x-input-full id="unit_number" name="unit_number" label="{{ __('Unit number') }}"
+                                    x-bind:required="unit" />
                                 </div>
                             </div>
                             <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                                 <div class="w-full">
                                     <x-select-full name="unit_type_id" id="unit_type_id" label="{{ __('Unit type') }}"
-                                        defaultOption="Selecciona un tipo">
+                                        defaultOption="Selecciona un tipo" x-bind:required="unit">
                                         @foreach ($unitTypes as $unitType)
                                             <option value="{{ $unitType->id }}" @selected(old('unit_type_id') == $unitType->id)>
                                                 {{ $unitType->name }}
@@ -99,7 +102,8 @@
                                 </div>
                                 <div class="w-full">
                                     <x-select-full name="unit_color_id" id="unit_color_id"
-                                        label="{{ __('Unit color') }}" defaultOption="Selecciona un color">
+                                        label="{{ __('Unit color') }}" defaultOption="Selecciona un color"
+                                        x-bind:required="unit">
                                         @foreach ($unitColors as $unitColor)
                                             <option value="{{ $unitColor->id }}" @selected(old('unit_color_id') == $unitColor->id)>
                                                 {{ $unitColor->name }}
@@ -109,13 +113,13 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                            <div class="w-full">
-                                <x-textarea-full id="comment" name="comment" label="{{ __('Comments') }}"/>
-                            </div>
+                    </div>
+                    <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
+                        <div class="w-full">
+                            <x-textarea-full id="comment" name="comment" label="{{ __('Comments') }}" />
                         </div>
                     </div>
+
 
                 </div>
 

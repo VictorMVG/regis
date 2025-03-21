@@ -9,8 +9,10 @@
 @endphp
 
 <div class="py-2 w-full">
-    @if($label)
+    @if ($label)
         <x-label for="{{ $id }}" :value="$label" />
     @endif
-    <input id="{{ $id }}" class="{{ $defaultClass }}" type="{{ $type }}" name="{{ $name }}" value="{{ old($name, $defaultValue) }}" @if($required) required @endif @if($placeholder) placeholder="{{ $placeholder }}" @endif />
+    <input id="{{ $id }}" class="{{ $defaultClass }}" type="{{ $type }}" name="{{ $name }}"
+        value="{{ old($name, $defaultValue) }}" @if ($required) required @endif
+        @if ($placeholder) placeholder="{{ $placeholder }}" @endif {{ $attributes }} />
 </div>
