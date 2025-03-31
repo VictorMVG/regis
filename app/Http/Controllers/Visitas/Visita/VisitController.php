@@ -214,7 +214,25 @@ class VisitController extends Controller
      */
     public function destroy(Visit $visit)
     {
-        //
+        try {
+            $visit->delete();
+
+            session()->flash('swal', json_encode([
+                'title' => '!Bien hecho!',
+                'text' => 'Visita eliminada correctamente',
+                'icon' => 'success',
+            ]));
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            session()->flash('swal', json_encode([
+                'title' => 'Error',
+                'text' => 'Hubo un problema al eliminar la visita. ' . $e->getMessage(),
+                'icon' => 'error',
+            ]));
+        }
+
+        return redirect()->back();
     }
 
     /**

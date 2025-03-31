@@ -149,8 +149,8 @@ class UserController extends Controller
     {
         $authUser = auth()->user();
 
-         // Obtener el ID del estado "ACTIVO (A)"
-         $activeStatusId = Status::where('name', 'ACTIVO (A)')->value('id');
+        // Obtener el ID del estado "ACTIVO (A)"
+        $activeStatusId = Status::where('name', 'ACTIVO (A)')->value('id');
 
         // Verificar si el usuario autenticado tiene el rol ADMINISTRADOR DE SEDE
         if ($authUser->hasRole('ADMINISTRADOR DE SEDE')) {
@@ -178,7 +178,7 @@ class UserController extends Controller
         } else {
             // Si no tiene el rol ADMINISTRADOR DE SEDE, obtener todos los headquarters
             $headquarters = Headquarter::where('status_id', $activeStatusId)
-            ->with('company')->get();
+                ->with('company')->get();
         };
 
 
@@ -282,6 +282,21 @@ class UserController extends Controller
             session()->flash('swal', json_encode([
                 'title' => 'Error',
                 'text' => 'No tienes permiso para eliminar un SUPER USUARIO',
+                'icon' => 'error',
+            ]));
+
+            return redirect()->route('users.index');
+        }
+
+        // Verificar si el usuario tiene relaciones en otras tablas
+        if (
+            $user->visits()->exists() ||
+            $user->updatedVisits()->exists() ||
+            $user->exitRegisteredVisits()->exists()
+        ) {
+            session()->flash('swal', json_encode([
+                'title' => 'Error',
+                'text' => 'No puedes eliminar este usuario porque está siendo referenciado en otras tablas.',
                 'icon' => 'error',
             ]));
 
