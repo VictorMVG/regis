@@ -29,6 +29,7 @@ class Visit extends Model
         'unit_color_id',
         'comment',
         'exit_time',
+        'created_at',
         'updated_by',
         'exit_registered_by',
     ];
@@ -38,6 +39,9 @@ class Visit extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    // Deshabilitar la actualización automática de timestamps si es necesario
+    public $timestamps = true;
 
     //relacion uno a muchos inversa con la tabla unit_types
     public function unitType()

@@ -127,6 +127,15 @@ class VisitController extends Controller
      */
     public function edit(Visit $visit)
     {
+
+        // Usuario autenticado
+        $user = Auth::user();
+
+        // Si el usuario es ADMINISTRADOR DE SEDE y no coincide el company_id, lanzar error 404
+        if ($user->hasRole('ADMINISTRADOR DE SEDE') && $user->company_id !== $visit->headquarter->company_id) {
+            abort(404); // Mostrar página de error 404
+        }
+
         $unitColors = UnitColor::all();
         $unitTypes = UnitType::all();
         $headquarters = Headquarter::with('company')->get();
@@ -161,9 +170,13 @@ class VisitController extends Controller
             'unit_type_id' => 'nullable|exists:unit_types,id',
             'unit_color_id' => 'nullable|exists:unit_colors,id',
             'comment' => 'nullable|string',
+            'created_at' => 'nullable|date', // Validar que sea una fecha válida
+            'exit_time' => 'nullable|date', // Validar que sea una fecha válida
         ])->validate();
 
-        $validated['headquarter_id'] = $user->hasRole('GUARDIA') ? $user->headquarter_id : $validated['headquarter_id'];
+        $validated['headquarter_id'] = $user->hasRole('GUARDIA')
+            ? $user->headquarter_id
+            : ($validated['headquarter_id'] ?? $visit->headquarter_id);
 
         // Si el toggle "unit" es falso, limpiar los campos relacionados con el vehículo
         if (!$validated['unit']) {
@@ -188,8 +201,24 @@ class VisitController extends Controller
                 return redirect()->route('visits.edit', $visit->id);
             }
 
+            // si tu rol es diferente de SUPER USUARIO Y ADMINISTRADOR GENERAL solo debe permitirte editar el registro que coincida con el company_id
+            if ($user->hasRole(['GUARDIA', 'ADMINISTRADOR DE SEDE'])) {
+                if ($user->company_id !== $visit->headquarter->company_id) {
+                    session()->flash('swal', json_encode([
+                        'title' => 'Error',
+                        'text' => 'No tienes permiso para editar esta visita.',
+                        'icon' => 'error',
+                    ]));
+
+                    return redirect()->route('visits.edit', $visit->id);
+                }
+            }
+
             // Actualizar el registro
-            $visit->update($validated);
+            $visit->update(array_merge($validated, [
+                'created_at' => $validated['created_at'] ?? $visit->created_at, // Mantener el valor actual si no se envía
+                'exit_time' => $validated['exit_time'] ?? $visit->exit_time,   // Mantener el valor actual si no se envía
+            ]));
 
             session()->flash('swal', json_encode([
                 'title' => '!Bien hecho!',
@@ -197,7 +226,7 @@ class VisitController extends Controller
                 'icon' => 'success',
             ]));
 
-            return redirect()->route('dashboard');
+            return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('swal', json_encode([
                 'title' => 'Error',
@@ -206,7 +235,7 @@ class VisitController extends Controller
             ]));
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->back();
     }
 
     /**

@@ -12,7 +12,7 @@ use App\Http\Controllers\Visitas\Visita\VisitController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::middleware([
@@ -134,8 +134,8 @@ Route::middleware([
     Route::get('visitas/create', [VisitController::class, 'create'])->name('visits.create')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
     Route::post('visitas', [VisitController::class, 'store'])->name('visits.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
     Route::get('visitas/{visit}', [VisitController::class, 'show'])->name('visits.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
-    Route::get('visitas/{visit}/edit', [VisitController::class, 'edit'])->name('visits.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
-    Route::put('visitas/{visit}', [VisitController::class, 'update'])->name('visits.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::get('visitas/{visit}/edit', [VisitController::class, 'edit'])->name('visits.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
+    Route::put('visitas/{visit}', [VisitController::class, 'update'])->name('visits.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::delete('visitas/{visit}', [VisitController::class, 'destroy'])->name('visits.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::patch('/visits/{visit}/exit-time', [VisitController::class, 'updateExitTime'])->name('visits.updateExitTime')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
     Route::get('/visits/export', [VisitController::class, 'export'])->name('visits.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');

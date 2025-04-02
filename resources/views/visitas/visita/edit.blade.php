@@ -11,39 +11,42 @@
 
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                         @if (auth()->user()->hasRole('SUPER USUARIO|ADMINISTRADOR GENERAL'))
-                        <div class="w-full">
-                            <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Unit color') }}"
-                                defaultValue="{{ $visit->headquarter_id }}">
-                                @foreach ($headquarters as $headquarter)
-                                    <option value="{{ $headquarter->id }}" @selected(old('headquarter_id', $visit->headquarter_id) == $headquarter->id)>
-                                        {{ $headquarter->company->name }} - {{ $headquarter->name }}
-                                    </option>
-                                @endforeach
-                            </x-select-full>
-                        </div>
+                            <div class="w-full">
+                                <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Unit color') }}"
+                                    defaultValue="{{ $visit->headquarter_id }}">
+                                    @foreach ($headquarters as $headquarter)
+                                        <option value="{{ $headquarter->id }}" @selected(old('headquarter_id', $visit->headquarter_id) == $headquarter->id)>
+                                            {{ $headquarter->company->name }} - {{ $headquarter->name }}
+                                        </option>
+                                    @endforeach
+                                </x-select-full>
+                            </div>
                         @endif
                         <div class="w-full">
                             <x-input-full id="visitor_name" name="visitor_name" label="{{ __('Visitor name') }}"
-                                required  defaultValue="{{ $visit->visitor_name }}"/>
+                                required defaultValue="{{ old('visitor_name', $visit->visitor_name) }}" />
                         </div>
                         <div class="w-full">
                             <x-input-full id="company_name" name="company_name" label="{{ __('Company name') }}"
-                                required  defaultValue="{{ $visit->company_name }}"/>
+                                required defaultValue="{{ old('visitor_name', $visit->company_name) }}" />
                         </div>
                     </div>
 
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                         <div class="w-full">
-                            <x-input-full id="reason" name="reason" label="{{ __('Reason') }}" required  defaultValue="{{ $visit->reason }}"/>
+                            <x-input-full id="reason" name="reason" label="{{ __('Reason') }}"
+                                required defaultValue="{{ old('reason', $visit->reason) }}" />
                         </div>
                         <div class="w-full">
-                            <x-input-full id="to_see" name="to_see" label="{{ __('To see') }}" required defaultValue="{{ $visit->to_see }}"/>
+                            <x-input-full id="to_see" name="to_see" label="{{ __('To see') }}"
+                                required defaultValue="{{ old('to_see', $visit->to_see) }}" />
                         </div>
                     </div>
 
-                    <div x-data="{ 
-                        alcoholTest: {{ old('alcohol_test', $visit->alcohol_test) ? 'true' : 'false' }}, 
-                        unit: {{ old('unit', $visit->unit) ? 'true' : 'false' }}}">
+                    <div x-data="{
+                        alcoholTest: {{ old('alcohol_test', $visit->alcohol_test) ? 'true' : 'false' }},
+                        unit: {{ old('unit', $visit->unit) ? 'true' : 'false' }}
+                    }">
                         <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                             <div class="w-full">
                                 <input type="hidden" name="alcohol_test" :value="alcoholTest ? 1 : 0">
@@ -79,19 +82,22 @@
                         <div x-show="unit" x-cloak class="pt-5">
                             <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                                 <div class="w-full">
-                                    <x-input-full id="unit_plate" name="unit_plate" label="{{ __('Unit plate') }}" defaultValue="{{ $visit->unit_plate }}"/>
+                                    <x-input-full id="unit_plate" name="unit_plate" label="{{ __('Unit plate') }}"
+                                        defaultValue="{{ $visit->unit_plate }}" />
                                 </div>
                                 <div class="w-full">
-                                    <x-input-full id="unit_model" name="unit_model" label="{{ __('Unit model') }}" defaultValue="{{ $visit->unit_model }}"/>
+                                    <x-input-full id="unit_model" name="unit_model" label="{{ __('Unit model') }}"
+                                        defaultValue="{{ $visit->unit_model }}" />
                                 </div>
                                 <div class="w-full">
-                                    <x-input-full id="unit_number" name="unit_number" label="{{ __('Unit number') }}" defaultValue="{{ $visit->unit_number }}"/>
+                                    <x-input-full id="unit_number" name="unit_number" label="{{ __('Unit number') }}"
+                                        defaultValue="{{ $visit->unit_number }}" />
                                 </div>
                             </div>
                             <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                                 <div class="w-full">
                                     <x-select-full name="unit_type_id" id="unit_type_id" label="{{ __('Unit type') }}"
-                                    defaultValue="{{ $visit->unit_type_id }}">
+                                        defaultValue="{{ $visit->unit_type_id }}">
                                         @foreach ($unitTypes as $unitType)
                                             <option value="{{ $unitType->id }}" @selected(old('unit_type_id', $visit->unit_type_id) == $unitType->id)>
                                                 {{ $unitType->name }}
@@ -112,9 +118,26 @@
                             </div>
                         </div>
 
+                        <!-- Campos para SUPER USUARIO, ADMINISTRADOR GENERAL y ADMINISTRADOR DE SEDE -->
+                        @if (auth()->user()->hasRole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE'))
+                            <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
+                                <div class="w-full">
+                                    <x-input-full id="created_at" name="created_at" type="datetime-local"
+                                        label="{{ __('Entry datetime') }}"
+                                        defaultValue="{{ $visit->created_at->format('Y-m-d\TH:i') }}" />
+                                </div>
+                                <div class="w-full">
+                                    <x-input-full id="exit_time" name="exit_time" type="datetime-local"
+                                        label="{{ __('Exit datetime') }}"
+                                        defaultValue="{{ $visit->exit_time ? $visit->exit_time->format('Y-m-d\TH:i') : '' }}" />
+                                </div>
+                            </div>
+                        @endif
+
                         <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
                             <div class="w-full">
-                                <x-textarea-full id="comment" name="comment" label="{{ __('Comments') }}" :defaultValue="$visit->comment"/>
+                                <x-textarea-full id="comment" name="comment" label="{{ __('Comments') }}"
+                                :defaultValue="old('comment', $visit->comment)" />
                             </div>
                         </div>
                     </div>

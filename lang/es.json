@@ -400,6 +400,8 @@
     "Unit": "Vehiculo?",
     "Entry time": "Hora de entrada",
     "Exit time": "Hora de salida",
+    "Entry datetime": "Fecha y hora de entrada",
+    "Exit datetime": "Fecha y hora de salida",
     "Creating:": "Creando:",
     "New visit": "Nueva visita",
     "Reason": "Motivo de la visita",
