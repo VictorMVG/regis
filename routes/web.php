@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Bitacoras\Bitacora\BinnacleController;
 use App\Http\Controllers\Catalogos\ObservationTypeController;
 use App\Http\Controllers\Catalogos\UnitColorController;
 use App\Http\Controllers\Catalogos\UnitTypeController;
@@ -143,8 +144,8 @@ Route::middleware([
     // Rutas para Visitas
     // ------------------------------
     Route::get('visitas', [VisitController::class, 'index'])->name('visits.index')->middleware('role:SUPER USUARIO||ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
-    Route::get('visitas/create', [VisitController::class, 'create'])->name('visits.create')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
-    Route::post('visitas', [VisitController::class, 'store'])->name('visits.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
+    Route::get('visitas/create', [VisitController::class, 'create'])->name('visits.create')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    Route::post('visitas', [VisitController::class, 'store'])->name('visits.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::get('visitas/{visit}', [VisitController::class, 'show'])->name('visits.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::get('visitas/{visit}/edit', [VisitController::class, 'edit'])->name('visits.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::put('visitas/{visit}', [VisitController::class, 'update'])->name('visits.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
@@ -153,4 +154,16 @@ Route::middleware([
     Route::get('/visits/export', [VisitController::class, 'export'])->name('visits.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::get('/visits/export-filtered', [VisitController::class, 'exportFiltered'])->name('visits.exportFiltered');
 
+    // ------------------------------
+    // Rutas para Bitacoras
+    // ------------------------------
+    Route::get('bitacoras', [BinnacleController::class, 'index'])->name('binnacles.index')->middleware('role:SUPER USUARIO||ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
+    Route::get('bitacoras/create', [BinnacleController::class, 'create'])->name('binnacles.create')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    Route::post('bitacoras', [BinnacleController::class, 'store'])->name('binnacles.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    Route::get('bitacoras/{binnacle}', [BinnacleController::class, 'show'])->name('binnacles.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    Route::get('bitacoras/{binnacle}/edit', [BinnacleController::class, 'edit'])->name('binnacles.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    Route::put('bitacoras/{binnacle}', [BinnacleController::class, 'update'])->name('binnacles.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE1|GUARDIA');
+    Route::delete('bitacoras/{binnacle}', [BinnacleController::class, 'destroy'])->name('binnacles.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::get('/binnacles/export', [BinnacleController::class, 'export'])->name('binnacles.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    Route::get('/binnacles/export-filtered', [BinnacleController::class, 'exportFiltered'])->name('binnacles.exportFiltered');
 });

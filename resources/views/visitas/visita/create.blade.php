@@ -10,7 +10,7 @@
                 <div class="space-y-2 sm:space-y-4">
 
                     <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                        @if (auth()->user()->hasRole('SUPER USUARIO|ADMINISTRADOR GENERAL'))
+                        @if (auth()->user()->hasRole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE'))
                             <div class="w-full">
                                 <x-select-full name="headquarter_id" id="headquarter_id" label="{{ __('Headquarter') }}"
                                     defaultOption="Selecciona una sede" required>

@@ -30,9 +30,18 @@ class VisitController extends Controller
      */
     public function create()
     {
+        // Usuario autenticado
+        $user = Auth::user();
+
         $unitColors = UnitColor::all();
         $unitTypes = UnitType::all();
-        $headquarters = Headquarter::with('company')->get();
+
+        if ($user->hasRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL'])) {
+            $headquarters = Headquarter::with('company')->get();
+        } else {
+            $headquarters = Headquarter::where('company_id', $user->company_id)->with('company')->get();
+        }
+
         return view('visitas.visita.create', compact('unitColors', 'unitTypes', 'headquarters'));
     }
 
@@ -127,7 +136,6 @@ class VisitController extends Controller
      */
     public function edit(Visit $visit)
     {
-
         // Usuario autenticado
         $user = Auth::user();
 
@@ -138,7 +146,13 @@ class VisitController extends Controller
 
         $unitColors = UnitColor::all();
         $unitTypes = UnitType::all();
-        $headquarters = Headquarter::with('company')->get();
+
+        if ($user->hasRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL'])) {
+            $headquarters = Headquarter::with('company')->get();
+        } else {
+            $headquarters = Headquarter::where('company_id', $user->company_id)->with('company')->get();
+        }
+
         return view('visitas.visita.edit', compact('visit', 'unitColors', 'unitTypes', 'headquarters'));
     }
 

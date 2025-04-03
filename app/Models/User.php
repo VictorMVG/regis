@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Bitacoras\Bitacora\Binnacle;
 use App\Models\Configuracion\Catalogos\Status;
 use App\Models\Configuracion\Usuarios\Catalogos\Company;
 use App\Models\Configuracion\Usuarios\Catalogos\Headquarter;
@@ -109,5 +110,17 @@ class User extends Authenticatable
     public function exitRegisteredVisits()
     {
         return $this->hasMany(Visit::class, 'exit_registered_by');
+    }
+
+    //Relacion uno a muchos con la tabla binnacles
+    public function binnacles()
+    {
+        return $this->hasMany(Binnacle::class);
+    }
+    
+    // Relación uno a muchos con la tabla binnacles (registros actualizados por el usuario)
+    public function updatedBinnacles()
+    {
+        return $this->hasMany(Binnacle::class, 'updated_by');
     }
 }

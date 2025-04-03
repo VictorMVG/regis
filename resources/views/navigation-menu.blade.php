@@ -21,6 +21,9 @@
                         <x-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
                             {{ __('All visits') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('binnacles.index') }}" :active="request()->routeIs('binnacles.*')">
+                            {{ __('All binnacles') }}
+                        </x-nav-link>
                     @endhasanyrole
 
                     @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE')
@@ -199,6 +202,9 @@
             @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL')
                 <x-responsive-nav-link href="{{ route('visits.index') }}" :active="request()->routeIs('visits.*')">
                     {{ __('All visits') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('binnacles.index') }}" :active="request()->routeIs('binnacles.*')">
+                    {{ __('All binnacles') }}
                 </x-responsive-nav-link>
             @endhasanyrole
 

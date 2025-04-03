@@ -40,9 +40,6 @@ class Visit extends Model
         'updated_at' => 'datetime',
     ];
 
-    // Deshabilitar la actualización automática de timestamps si es necesario
-    public $timestamps = true;
-
     //relacion uno a muchos inversa con la tabla unit_types
     public function unitType()
     {

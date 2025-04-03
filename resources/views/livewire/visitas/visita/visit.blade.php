@@ -1,4 +1,10 @@
 <div class="bg-white dark:bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
+
+    <!-- Título de la tabla -->
+    <h2 class="text-2xl font-bold text-center py-4 text-gray-900 dark:text-white">
+        {{ __('Todos los registros de visitas') }}
+    </h2>
+
     <!-- Table header -->
     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 px-1 py-2">
 
@@ -27,7 +33,7 @@
         <div
             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 px-2 py-1">
 
-            @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE')
+            @haspermission('DESCARGAR EXCEL DE VISITAS DIARIAS')
                 <x-button type="button" color="green" wire:click="export">
                     <svg class="h-5 w-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                         viewBox="0 0 24 24">
@@ -38,22 +44,22 @@
                     </svg>
                     {{ __('DESCARGAR EXCEL') }}
                 </x-button>
-            @endhasanyrole
+            @endhaspermission
 
-            @hasanyrole('SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA')
-            <!-- Add Buttons -->
-            <a href="{{ route('visits.create') }}">
-                <x-button type="button" color="green">
-                    <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    {{ __('Add') }}
-                </x-button>
-            </a>
-            @endhasanyrole
-            
+            @haspermission('CREAR VISITA')
+                <!-- Add Buttons -->
+                <a href="{{ route('visits.create') }}">
+                    <x-button type="button" color="green">
+                        <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        {{ __('Add') }}
+                    </x-button>
+                </a>
+            @endhaspermission
+
         </div>
 
     </div>

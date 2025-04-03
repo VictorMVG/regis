@@ -2,6 +2,7 @@
 
 namespace App\Models\Configuracion\Usuarios\Catalogos;
 
+use App\Models\Bitacoras\Bitacora\Binnacle;
 use App\Models\Configuracion\Catalogos\Status;
 use App\Models\User;
 use App\Models\Visitas\Visita\Visit;
@@ -43,5 +44,11 @@ class Headquarter extends Model
     public function visit()
     {
         return $this->hasMany(Visit::class);
+    }
+
+    // Relación uno a muchos con la tabla binnacle
+    public function binnacle()
+    {
+        return $this->hasMany(Binnacle::class);
     }
 }
