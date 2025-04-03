@@ -42,6 +42,9 @@
                         <x-nav-link href="{{ route('unit-types.index') }}" :active="request()->routeIs('unit-types.*')">
                             {{ __('Unit types') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('observation-types.index') }}" :active="request()->routeIs('observation-types.*')">
+                            {{ __('Observation types') }}
+                        </x-nav-link>
                     @endhasanyrole
 
                     @hasanyrole('SUPER USUARIO')
@@ -217,6 +220,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link href="{{ route('unit-types.index') }}" :active="request()->routeIs('unit-types.*')">
                     {{ __('Unit Types') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('observation-types.index') }}" :active="request()->routeIs('observation-types.*')">
+                    {{ __('Observation Types') }}
                 </x-responsive-nav-link>
             @endhasanyrole
 

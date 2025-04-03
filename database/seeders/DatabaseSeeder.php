@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Livewire\Catalogos\TipoDeObservacion\ObservationType;
 use App\Livewire\Configuracion\Usuarios\Catalogos\Permiso\Permission;
 use App\Livewire\Visitas\Visita\Visit;
 use App\Models\User;
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UnitTypeSeeder::class,
             UnitColorSeeder::class,
+            ObservationTypeSeeder::class,
             UserSeeder::class,
             VisitSeeder::class,
         ]);

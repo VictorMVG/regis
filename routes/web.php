@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Catalogos\ObservationTypeController;
 use App\Http\Controllers\Catalogos\UnitColorController;
 use App\Http\Controllers\Catalogos\UnitTypeController;
 use App\Http\Controllers\Configuracion\Catalogos\StatusController;
@@ -126,6 +127,17 @@ Route::middleware([
     Route::get('tipos-de-unidad/{unitType}/edit', [UnitTypeController::class, 'edit'])->name('unit-types.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::put('tipos-de-unidad/{unitType}', [UnitTypeController::class, 'update'])->name('unit-types.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::delete('tipos-de-unidad/{unitType}', [UnitTypeController::class, 'destroy'])->name('unit-types.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+
+    // ------------------------------
+    // Rutas para Tipos de Observacion
+    // ------------------------------
+    Route::get('tipos-de-observacion', [ObservationTypeController::class, 'index'])->name('observation-types.index')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::get('tipos-de-observacion/create', [ObservationTypeController::class, 'create'])->name('observation-types.create')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::post('tipos-de-observacion', [ObservationTypeController::class, 'store'])->name('observation-types.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::get('tipos-de-observacion/{observationType}', [ObservationTypeController::class, 'show'])->name('observation-types.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::get('tipos-de-observacion/{observationType}/edit', [ObservationTypeController::class, 'edit'])->name('observation-types.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::put('tipos-de-observacion/{observationType}', [ObservationTypeController::class, 'update'])->name('observation-types.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::delete('tipos-de-observacion/{observationType}', [ObservationTypeController::class, 'destroy'])->name('observation-types.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
 
     // ------------------------------
     // Rutas para Visitas
