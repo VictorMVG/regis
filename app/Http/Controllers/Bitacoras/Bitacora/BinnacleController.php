@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Bitacoras\Bitacora;
 
+use App\Exports\BinnacleFilteredExport;
+use App\Exports\BinnaclesTodayExport;
 use App\Http\Controllers\Controller;
 use App\Models\Bitacoras\Bitacora\Binnacle;
 use App\Models\Catalogos\ObservationType;
@@ -11,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BinnacleController extends Controller
 {
@@ -119,7 +122,12 @@ class BinnacleController extends Controller
                 'icon' => 'success',
             ]));
 
-            return redirect()->back();
+            // si el usuario es GUARDIA se redirige al dashboard
+            if ($user->hasRole('GUARDIA')) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('binnacles.index');
+            }
         } catch (\Exception $e) {
             session()->flash('swal', json_encode([
                 'title' => 'Error',
@@ -258,7 +266,12 @@ class BinnacleController extends Controller
                 'icon' => 'success',
             ]));
 
-            return redirect()->route('binnacles.index');
+            // si el usuario es GUARDIA se redirige al dashboard
+            if ($user->hasRole('GUARDIA')) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('binnacles.index');
+            }
         } catch (\Exception $e) {
             session()->flash('swal', json_encode([
                 'title' => 'Error',
@@ -302,5 +315,27 @@ class BinnacleController extends Controller
         }
 
         return redirect()->route('binnacles.index');
+    }
+
+    public function export()
+    {
+        $user = Auth::user(); // Usuario autenticado
+        $timestamp = now()->format('d-m-Y_H-i'); // Fecha y hora actual en formato dd-mm-aaaa_hh-mm
+        $fileName = '';
+
+        // Construir el nombre del archivo según el rol
+        if ($user->hasRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL'])) {
+            $fileName = "bitacoras_diarias_de_todas_las_sedes_{$timestamp}.xlsx";
+        } elseif ($user->hasRole('ADMINISTRADOR DE SEDE')) {
+            $companyName = $user->company->name; // Relación con la compañía
+            $fileName = "bitacoras_diarias_de_{$companyName}_todas_las_sedes_{$timestamp}.xlsx";
+        } elseif ($user->hasRole('GUARDIA')) {
+            $headquarterName = $user->headquarter->name; // Relación con la sede
+            $fileName = "bitacoras_diarias_de_la_sede_{$headquarterName}_{$timestamp}.xlsx";
+        } else {
+            $fileName = "bitacoras_diarias_{$timestamp}.xlsx"; // Nombre genérico para otros roles
+        }
+
+        return Excel::download(new BinnaclesTodayExport, $fileName);
     }
 }

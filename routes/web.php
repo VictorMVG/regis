@@ -151,8 +151,8 @@ Route::middleware([
     Route::put('visitas/{visit}', [VisitController::class, 'update'])->name('visits.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::delete('visitas/{visit}', [VisitController::class, 'destroy'])->name('visits.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::patch('/visits/{visit}/exit-time', [VisitController::class, 'updateExitTime'])->name('visits.updateExitTime')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|GUARDIA');
-    Route::get('/visits/export', [VisitController::class, 'export'])->name('visits.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
-    Route::get('/visits/export-filtered', [VisitController::class, 'exportFiltered'])->name('visits.exportFiltered');
+    Route::get('/visits/export', [VisitController::class, 'exportVisits'])->name('visits.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    // Route::get('/visits/export-filtered', [VisitController::class, 'exportFiltered'])->name('visits.exportFiltered');
 
     // ------------------------------
     // Rutas para Bitacoras
@@ -164,6 +164,6 @@ Route::middleware([
     Route::get('bitacoras/{binnacle}/edit', [BinnacleController::class, 'edit'])->name('binnacles.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::put('bitacoras/{binnacle}', [BinnacleController::class, 'update'])->name('binnacles.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE1|GUARDIA');
     Route::delete('bitacoras/{binnacle}', [BinnacleController::class, 'destroy'])->name('binnacles.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
-    Route::get('/binnacles/export', [BinnacleController::class, 'export'])->name('binnacles.export')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
+    Route::get('/binnacles/export', [BinnacleController::class, 'export'])->name('binnacles.export');
     Route::get('/binnacles/export-filtered', [BinnacleController::class, 'exportFiltered'])->name('binnacles.exportFiltered');
 });

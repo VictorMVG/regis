@@ -311,7 +311,7 @@ class VisitController extends Controller
         return redirect()->route('dashboard');
     }
 
-    public function export()
+    public function exportVisits()
     {
         $user = Auth::user(); // Usuario autenticado
         $timestamp = now()->format('d-m-Y_H-i'); // Fecha y hora actual en formato dd-mm-aaaa_hh-mm
@@ -328,13 +328,5 @@ class VisitController extends Controller
         }
 
         return Excel::download(new VisitsExport, $fileName);
-    }
-
-    public function exportFiltered(Request $request)
-    {
-        $search = $request->input('search'); // Obtener el filtro de búsqueda
-
-        // Pasar los filtros a la clase de exportación
-        return Excel::download(new VisitsFilteredExport($search), 'visitas_filtradas.xlsx');
     }
 }

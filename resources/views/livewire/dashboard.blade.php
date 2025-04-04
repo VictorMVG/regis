@@ -2,7 +2,7 @@
 
     <!-- Título de la tabla -->
     <h2 class="text-2xl font-bold text-center py-4 text-gray-900 dark:text-white">
-        {{ __('Registros de visitas diarias') }}
+        {{ __('Visitas del día') }}
     </h2>
 
     <!-- Table header -->
