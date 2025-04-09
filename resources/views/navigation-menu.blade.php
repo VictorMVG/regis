@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false }" class="bg-gray-800 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -131,7 +131,7 @@
                             @else
                                 <span class="inline-flex rounded-md">
                                     <button type="button"
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-200 dark:text-gray-400 bg-gray-800 dark:bg-gray-800 hover:text-white dark:hover:text-gray-300 focus:outline-none focus:bg-gray-700 dark:focus:bg-gray-700 active:bg-gray-700 dark:active:bg-gray-700 transition ease-in-out duration-150">
                                         {{ Auth::user()->name }}
 
                                         <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@
 
                         <x-slot name="content">
                             <!-- Account Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
+                            <div class="block px-4 py-2 text-xs text-gray-200">
                                 {{ __('Manage Account') }}
                             </div>
 

@@ -48,30 +48,18 @@
     <!-- Table -->
     <div class="overflow-x-auto pb-32">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('User') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Email') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Rol') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Headquarter') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Status') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        <span class="sr-only">
-                            Actions
-                        </span>
-                    </th>
-                </tr>
-            </thead>
+            <x-head>
+                <x-header>{{ __('User') }}</x-header>
+                <x-header>{{ __('Email') }}</x-header>
+                <x-header>{{ __('Rol') }}</x-header>
+                <x-header>{{ __('Headquarter') }}</x-header>
+                <x-header>{{ __('Status') }}</x-header>
+                <x-header>
+                    <span class="sr-only">
+                        Actions
+                    </span>
+                </x-header>
+            </x-head>
             <tbody>
                 @foreach ($users as $user)
                     <tr wire:key="{{ $user->id }}"

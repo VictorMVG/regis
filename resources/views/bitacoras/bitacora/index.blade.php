@@ -1,3 +1,3 @@
 <x-app-layout>
-    @livewire('bitacoras.bitacora.binnacle-dashboard')
+    @livewire('bitacoras.bitacora.binnacle')
 </x-app-layout>

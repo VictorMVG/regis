@@ -155,6 +155,13 @@ class BinnacleController extends Controller
         // Obtener el usuario autenticado
         $user = Auth::user();
 
+        //SI EL ROL DEL USUARIO AUTENTICADO ES GUARDIA, NO DEBERIA PODER ACCEDER A EDITAR REGISTROS QUE NO LE PERTENECEN MOSTRANDO UN 404 PAGINA NO ENCONTRADA
+        if ($user->hasRole('GUARDIA') && $binnacle->user_id !== $user->id) {
+            abort(404);
+        }elseif ($user->hasRole('ADMINISTRADOR DE SEDE') && $binnacle->headquarter->company->id !== $user->company_id) {
+            abort(404);
+        }
+
         $observationTypes = ObservationType::all();
 
         if ($user->hasRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL'])) {

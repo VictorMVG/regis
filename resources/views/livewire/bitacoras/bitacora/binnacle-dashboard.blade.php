@@ -43,7 +43,7 @@
                             <path
                                 d="M11.469 23.781a.75.75 0 0 0 1.062 0l4.5-4.5a.75.75 0 0 0-1.062-1.062L12.75 21.44V8.25a.75.75 0 0 0-1.5 0v13.19l-3.219-3.22a.75.75 0 0 0-1.062 1.062z" />
                         </svg>
-                        {{ __('DESCARGAR EXCEL') }}
+                        {{ __('BITACORA DEL DIA') }}
                     </x-button>
                 </a>
             @endhaspermission
@@ -51,7 +51,7 @@
             @haspermission('CREAR BITACORA')
                 <!-- Add Buttons -->
                 <a href="{{ route('binnacles.create') }}">
-                    <x-button type="button" color="green">
+                    <x-button type="button">
                         <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -70,58 +70,42 @@
     </div>
     <!-- Table -->
     <div class="overflow-x-auto pb-32">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Created by') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Observation') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Images') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Register date') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Acciones') }}
-                    </th>
-                </tr>
-            </thead>
+
+        <x-table>
+
+            <x-head>
+                <x-header>{{ __('Created by') }}</x-header>
+                <x-header>{{ __('Observation') }}</x-header>
+                <x-header>{{ __('Images') }}</x-header>
+                <x-header>{{ __('Register date') }}</x-header>
+                <x-header>{{ __('Acciones') }}</x-header>
+            </x-head>
+        
             <tbody>
                 @foreach ($binnacles as $binnacle)
-                    <tr wire:key="{{ $binnacle->id }}"
-                        class="border-b dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                        <th scope="row"
-                            class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $binnacle->user->name }}
-                        </th>
-                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 text-wrap dark:text-white">
-                            <span
-                                class="bg-blue-200 text-blue-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-blue-900 dark:text-blue-300">
+
+                    <x-row wire:key="{{ $binnacle->id }}">
+                        
+                        <x-cell>{{ $binnacle->user->name }}</x-cell>
+
+                        <x-cell>
+                            <span class="bg-blue-200 text-blue-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-blue-900 dark:text-blue-300">
                                 {{ $binnacle->headquarter->company->name }} - {{ $binnacle->headquarter->name }}
                             </span>
-                            >> @if ($binnacle->observationType->name === 'IMPORTANTE')
-                                <span
-                                    class="bg-red-300 text-red-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-red-900 dark:text-red-500">
+                            >> 
+                            @if ($binnacle->observationType->name === 'IMPORTANTE')
+                                <span class="bg-red-300 text-red-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-red-900 dark:text-red-500">
                                     {{ $binnacle->observationType->name }}
                                 </span>
                             @else
-                                <span
-                                    class="bg-yellow-200 text-yellow-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+                                <span class="bg-yellow-200 text-yellow-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
                                     {{ $binnacle->observationType->name }}
                                 </span>
                             @endif
-                            <br> <br>
-                            {{ $binnacle->observation }}
-                        </th>
-                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 text-wrap dark:text-white">
-                            {{ $binnacle->images ? 'SI' : 'NA' }}
-                        </th>
-                        <th scope="row"
-                            class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <br><br>{{ $binnacle->observation }}
+                        </x-cell>
+                        <x-cell>{{ $binnacle->images ? 'SI' : 'NA' }}</x-cell>
+                        <x-cell>
                             <span class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ $binnacle->created_at->diffForHumans() }}
                             </span>
@@ -129,8 +113,7 @@
                             <span>{{ $binnacle->created_at->format('h:i A') }}</span>
                             <br>
                             <span>{{ $binnacle->created_at->format('d/m/Y') }}</span>
-                        </th>
-
+                        </x-cell>
                         <td class="py-2">
                             <div class="flex flex-wrap justify-between items-center">
                                 @haspermission('VER DETALLES DE LA BITACORA')
@@ -187,13 +170,17 @@
                                 @endhaspermission
                             </div>
                         </td>
+                    </x-row>
 
-                    </tr>
                 @endforeach
+
             </tbody>
-        </table>
+
+        </x-table>
+        
         <div class="p-4">
             {{ $binnacles->links() }}
         </div>
+
     </div>
 </div>

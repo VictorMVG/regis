@@ -51,7 +51,7 @@
             @haspermission('CREAR VISITA')
                 <!-- Add Buttons -->
                 <a href="{{ route('visits.create') }}">
-                    <x-button type="button" color="green">
+                    <x-button type="button">
                         <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -71,33 +71,19 @@
     <!-- Table -->
     <div class="overflow-x-auto pb-5">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Name and company') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3 text-wrap">
-                        {{ __('Visit reason') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Alcohol test') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Unit') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Entry time') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Exit time') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        <span class="sr-only">
-                            Actions
-                        </span>
-                    </th>
-                </tr>
-            </thead>
+            <x-head>
+                <x-header>{{ __('Name and company') }}</x-header>
+                <x-header>{{ __('Visit reason') }}</x-header>
+                <x-header>{{ __('Alcohol test') }}</x-header>
+                <x-header>{{ __('Unit') }}</x-header>
+                <x-header>{{ __('Entry time') }}</x-header>
+                <x-header>{{ __('Exit time') }}</x-header>
+                <x-header>
+                    <span class="sr-only">
+                        Actions
+                    </span>
+                </x-header>
+            </x-head>
             <tbody>
                 @foreach ($visits as $visit)
                     <tr wire:key="{{ $visit->id }}"

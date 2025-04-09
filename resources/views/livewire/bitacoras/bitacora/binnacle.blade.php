@@ -69,25 +69,15 @@
     <!-- Table -->
     <div class="overflow-x-auto pb-32">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Created by') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Observation') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Images') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Register date') }}
-                    </th>
-                    <th scope="col" class="px-4 py-3">
-                        {{ __('Acciones') }}
-                    </th>
-                </tr>
-            </thead>
+
+            <x-head>
+                <x-header>{{ __('Created by') }}</x-header>
+                <x-header>{{ __('Observation') }}</x-header>
+                <x-header>{{ __('Images') }}</x-header>
+                <x-header>{{ __('Register date') }}</x-header>
+                <x-header>{{ __('Acciones') }}</x-header>
+            </x-head>
+
             <tbody>
                 @foreach ($binnacles as $binnacle)
                     <tr wire:key="{{ $binnacle->id }}"
