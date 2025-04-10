@@ -49,7 +49,7 @@
             @haspermission('CREAR BITACORA')
                 <!-- Add Buttons -->
                 <a href="{{ route('binnacles.create') }}">
-                    <x-button type="button" color="green">
+                    <x-button type="button">
                         <svg class="h-5 w-5 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -123,7 +123,7 @@
                             <div class="flex flex-wrap justify-between items-center">
                                 @haspermission('VER DETALLES DE LA BITACORA')
                                     <a href="{{ route('binnacles.show', $binnacle) }}"
-                                        class="flex justify-center items-center w-1/2">
+                                        class="flex justify-center items-center w-1/2" title="Ver detalles">
                                         <svg class="w-6 h-6 text-gray-700 hover:text-green-600 dark:text-white"
                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                             height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@
                                         $binnacle->user_id === auth()->id())
                                     @haspermission('EDITAR BITACORA')
                                         <a href="{{ route('binnacles.edit', $binnacle) }}"
-                                            class="flex justify-center items-center w-1/2">
+                                            class="flex justify-center items-center w-1/2" title="Editar">
                                             <svg class="w-6 h-6 text-gray-700 hover:text-cyan-600 dark:text-white"
                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                                 height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -158,7 +158,7 @@
                                 @haspermission('ELIMINAR BITACORA')
                                     <form id="delete-form-{{ $binnacle->id }}"
                                         action="{{ route('binnacles.destroy', $binnacle) }}" method="POST"
-                                        class="flex justify-center items-center w-1/2">
+                                        class="flex justify-center items-center w-1/2" title="Eliminar">
                                         @csrf
                                         @method('DELETE')
 

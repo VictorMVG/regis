@@ -40,12 +40,7 @@
                             <strong>{{ __('Fecha de creación') }}:</strong>
                             <p>{{ $binnacle->created_at->format('d/m/Y h:i A') }}</p>
                         </div>
-
-                        <!-- Última actualización -->
-                        <div>
-                            <strong>{{ __('Fecha de creación') }}:</strong>
-                            <p>{{ $binnacle->created_at->format('d/m/Y h:i A') }}</p>
-                        </div>
+                        
                     </div>
 
                     <!-- Observación -->

@@ -1,7 +1,8 @@
 <x-app-layout>
 
     <x-form-full title="{{ __('Editing:') }} {{ $binnacle->title }}" method="PUT"
-        action="{{ route('binnacles.update', $binnacle) }}" buttonText="{{ __('Update') }}" maxWidthClass="max-w-7xl" enctype="multipart/form-data">
+        action="{{ route('binnacles.update', $binnacle) }}" buttonText="{{ __('Update') }}" maxWidthClass="max-w-7xl"
+        enctype="multipart/form-data">
 
         <div class="py-4 border-gray-200 sm:py-5 dark:border-gray-700">
             <!-- Inputs -->
@@ -33,6 +34,14 @@
                                 @endforeach
                             </x-select-full>
                         </div>
+                        <!-- Campos para SUPER USUARIO, ADMINISTRADOR GENERAL y ADMINISTRADOR DE SEDE -->
+                        @if (auth()->user()->hasRole('SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE'))
+                            <div class="w-full">
+                                <x-input-full id="created_at" name="created_at" type="datetime-local"
+                                    label="{{ __('Fecha y hora de registro') }}"
+                                    defaultValue="{{ $binnacle->created_at->format('Y-m-d\TH:i') }}" />
+                            </div>
+                        @endif
                     </div>
 
                     <div x-data="{ image: {{ old('image', $binnacle->images) ? 'true' : 'false' }} }">
@@ -76,7 +85,8 @@
                         <div class="space-y-4 sm:flex sm:space-x-4 sm:space-y-0" x-show="image" x-cloak>
                             @foreach ($binnacle->images as $image)
                                 <div class="form-group">
-                                    <img src="{{ asset('storage/' . $image) }}" alt="Image" class="img-thumbnail max-h-48 p-5">
+                                    <img src="{{ asset('storage/' . $image) }}" alt="Image"
+                                        class="img-thumbnail max-h-48 p-5">
                                     <input type="checkbox" name="existing_images[]" value="{{ $image }}"
                                         checked>
                                     <label for="existing_images[]">Mantener esta imagen</label>

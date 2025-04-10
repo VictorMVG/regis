@@ -69,10 +69,10 @@ Route::middleware([
     Route::get('sedes', [HeadquarterController::class, 'index'])->name('headquarters.index')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::get('sedes/create', [HeadquarterController::class, 'create'])->name('headquarters.create')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::post('sedes', [HeadquarterController::class, 'store'])->name('headquarters.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
-    Route::get('sedes/{headquarter}', [HeadquarterController::class, 'show'])->name('headquarters.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::get('sedes/{headquarter}', [HeadquarterController::class, 'show'])->name('headquarters.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::get('sedes/{headquarter}/edit', [HeadquarterController::class, 'edit'])->name('headquarters.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
     Route::put('sedes/{headquarter}', [HeadquarterController::class, 'update'])->name('headquarters.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
-    Route::delete('sedes/{headquarter}', [HeadquarterController::class, 'destroy'])->name('headquarters.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
+    Route::delete('sedes/{headquarter}', [HeadquarterController::class, 'destroy'])->name('headquarters.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE');
 
     // ------------------------------
     // Rutas para Usuarios
@@ -162,7 +162,7 @@ Route::middleware([
     Route::post('bitacoras', [BinnacleController::class, 'store'])->name('binnacles.store')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::get('bitacoras/{binnacle}', [BinnacleController::class, 'show'])->name('binnacles.show')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::get('bitacoras/{binnacle}/edit', [BinnacleController::class, 'edit'])->name('binnacles.edit')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
-    Route::put('bitacoras/{binnacle}', [BinnacleController::class, 'update'])->name('binnacles.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE1|GUARDIA');
+    Route::put('bitacoras/{binnacle}', [BinnacleController::class, 'update'])->name('binnacles.update')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL|ADMINISTRADOR DE SEDE|GUARDIA');
     Route::delete('bitacoras/{binnacle}', [BinnacleController::class, 'destroy'])->name('binnacles.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::get('/binnacles/export', [BinnacleController::class, 'export'])->name('binnacles.export');
     Route::get('/binnacles/export-filtered', [BinnacleController::class, 'exportFiltered'])->name('binnacles.exportFiltered');

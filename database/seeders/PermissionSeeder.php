@@ -78,10 +78,94 @@ class PermissionSeeder extends Seeder
                 'name' => 'DESCARGAR EXCEL DE TODAS LAS BITACORAS',
                 'guard_name' => 'sanctum',
             ],
+            [
+                'name' => 'VISUALIZAR USUARIOS',
+            ],
+            [
+                'name' => 'CREAR USUARIO',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'EDITAR USUARIO',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'VER DETALLES DEL USUARIO',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'ELIMINAR USUARIO',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'VISUALIZAR SEDES',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'CREAR SEDE',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'EDITAR SEDE',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'VER DETALLES DE LA SEDE',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'ELIMINAR SEDE',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'VISUALIZAR EMPRESAS',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'CREAR EMPRESA',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'EDITAR EMPRESA',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'VER DETALLES DE LA EMPRESA',
+                'guard_name' => 'sanctum',
+            ]
+            ,
+            [
+                'name' => 'ELIMINAR EMPRESA',
+                'guard_name' => 'sanctum',
+            ],
+            // CATALOGO
+            [
+                'name' => 'VISUALIZAR CATALOGOS',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'CREAR CATALOGO',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'EDITAR CATALOGO',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'VER DETALLES DEL CATALOGO',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'ELIMINAR CATALOGO',
+                'guard_name' => 'sanctum',
+            ],
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create($permission);
+            Permission::updateOrCreate(
+                ['name' => $permission['name']], // Condición para buscar el permiso existente
+                $permission // Datos para crear o actualizar
+            );
         }
     }
 }

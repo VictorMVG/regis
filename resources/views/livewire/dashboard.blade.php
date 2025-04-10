@@ -156,7 +156,7 @@
                             <div class="flex flex-wrap justify-between items-center">
                                 @haspermission('VER DETALLES DE LA VISITA')
                                     <a href="{{ route('visits.show', $visit) }}"
-                                        class="flex justify-center items-center w-1/2">
+                                        class="flex justify-center items-center w-1/2" title="Ver detalles">
                                         <svg class="w-6 h-6 text-gray-700 hover:text-green-600 dark:text-white"
                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                             height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -171,7 +171,7 @@
                                         $visit->user_id === auth()->id())
                                     @haspermission('EDITAR VISITA')
                                         <a href="{{ route('visits.edit', $visit) }}"
-                                            class="flex justify-center items-center w-1/2">
+                                            class="flex justify-center items-center w-1/2" title="Editar">
                                             <svg class="w-6 h-6 text-gray-700 hover:text-cyan-600 dark:text-white"
                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                                 height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -191,7 +191,7 @@
                                 @haspermission('ELIMINAR VISITA')
                                     <form id="delete-form-{{ $visit->id }}"
                                         action="{{ route('visits.destroy', $visit) }}" method="POST"
-                                        class="flex justify-center items-center w-1/2">
+                                        class="flex justify-center items-center w-1/2" title="Eliminar">
                                         @csrf
                                         @method('DELETE')
 

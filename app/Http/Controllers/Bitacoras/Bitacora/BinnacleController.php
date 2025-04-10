@@ -158,7 +158,7 @@ class BinnacleController extends Controller
         //SI EL ROL DEL USUARIO AUTENTICADO ES GUARDIA, NO DEBERIA PODER ACCEDER A EDITAR REGISTROS QUE NO LE PERTENECEN MOSTRANDO UN 404 PAGINA NO ENCONTRADA
         if ($user->hasRole('GUARDIA') && $binnacle->user_id !== $user->id) {
             abort(404);
-        }elseif ($user->hasRole('ADMINISTRADOR DE SEDE') && $binnacle->headquarter->company->id !== $user->company_id) {
+        } elseif ($user->hasRole('ADMINISTRADOR DE SEDE') && $binnacle->headquarter->company->id !== $user->company_id) {
             abort(404);
         }
 
@@ -190,6 +190,7 @@ class BinnacleController extends Controller
             'title' => 'required|string|max:255',
             'observation' => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validar cada imagen
+            'created_at' => 'nullable|date', // Validar que sea una fecha válida
         ])->validate();
 
         // Asignar el usuario autenticado
@@ -264,8 +265,9 @@ class BinnacleController extends Controller
                 return redirect()->route('binnacles.edit', $binnacle->id)->withInput();
             }
 
-            // Actualizar la bitácora
-            $binnacle->update($validated);
+            $binnacle->update(array_merge($validated, [
+                'created_at' => $validated['created_at'] ?? $binnacle->created_at, // Mantener el valor actual si no se envía
+            ]));
 
             session()->flash('swal', json_encode([
                 'title' => '!Bien hecho!',
