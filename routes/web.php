@@ -166,4 +166,5 @@ Route::middleware([
     Route::delete('bitacoras/{binnacle}', [BinnacleController::class, 'destroy'])->name('binnacles.destroy')->middleware('role:SUPER USUARIO|ADMINISTRADOR GENERAL');
     Route::get('/binnacles/export', [BinnacleController::class, 'export'])->name('binnacles.export');
     Route::get('/binnacles/export-filtered', [BinnacleController::class, 'exportFiltered'])->name('binnacles.exportFiltered');
+    Route::get('/binnacles/{binnacle}/export-pdf', [BinnacleController::class, 'exportPdf'])->name('binnacles.export-pdf');
 });

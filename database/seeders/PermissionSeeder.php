@@ -39,6 +39,10 @@ class PermissionSeeder extends Seeder
                 'guard_name' => 'sanctum',
             ],
             [
+                'name' => 'MARCAR SALIDA DE VISITA',
+                'guard_name' => 'sanctum',
+            ],
+            [
                 'name' => 'DESCARGAR EXCEL DE VISITAS DIARIAS',
                 'guard_name' => 'sanctum',
             ],
@@ -64,6 +68,10 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'name' => 'VER DETALLES DE LA BITACORA',
+                'guard_name' => 'sanctum',
+            ],
+            [
+                'name' => 'IMPRIMIR BITACORA',
                 'guard_name' => 'sanctum',
             ],
             [

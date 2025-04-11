@@ -92,16 +92,16 @@
                                 {{ $binnacle->headquarter->company->name }} - {{ $binnacle->headquarter->name }}
                             </span>
                             >> @if ($binnacle->observationType->name === 'IMPORTANTE')
-                            <span
-                                class="bg-red-300 text-red-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-red-900 dark:text-red-500">
-                                {{ $binnacle->observationType->name }}
-                            </span>
-                        @else
-                            <span
-                                class="bg-yellow-200 text-yellow-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
-                                {{ $binnacle->observationType->name }}
-                            </span>
-                        @endif
+                                <span
+                                    class="bg-red-300 text-red-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-red-900 dark:text-red-500">
+                                    {{ $binnacle->observationType->name }}
+                                </span>
+                            @else
+                                <span
+                                    class="bg-yellow-200 text-yellow-800 text-xs font-medium me-2 px-2.5 py-2 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+                                    {{ $binnacle->observationType->name }}
+                                </span>
+                            @endif
                             <br> <br>
                             {{ $binnacle->observation }}
                         </th>
@@ -119,7 +119,7 @@
                             <span>{{ $binnacle->created_at->format('d/m/Y') }}</span>
                         </th>
 
-                        <td class="py-2">
+                        {{-- <td class="py-2">
                             <div class="flex flex-wrap justify-between items-center">
                                 @haspermission('VER DETALLES DE LA BITACORA')
                                     <a href="{{ route('binnacles.show', $binnacle) }}"
@@ -130,6 +130,20 @@
                                             <path fill-rule="evenodd"
                                                 d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
                                                 clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                @endhaspermission
+
+
+                                @haspermission('IMPRIMIR BITACORA')
+                                    <a href="{{ route('binnacles.export-pdf', $binnacle) }}"
+                                        class="flex justify-center items-center w-1/2" title="Imprimir" target="_blank">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor"
+                                            class="w-6 h-5 text-gray-700 hover:text-yellow-600 dark:text-white"
+                                            viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
                                         </svg>
                                     </a>
                                 @endhaspermission
@@ -173,6 +187,71 @@
                                         </button>
                                     </form>
                                 @endhaspermission
+                            </div>
+                        </td> --}}
+
+                        <td class="py-2">
+                            <div class="relative" x-data="{ open: false }">
+                                <!-- Botón del menú -->
+                                <button @click="open = !open"
+                                    class="flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                    Opciones
+                                    <svg :class="open ? 'rotate-180' : 'rotate-0'"
+                                        class="w-4 h-4 ml-2 transition-transform duration-200"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <!-- Menú desplegable -->
+                                <div x-show="open" @click.away="open = false" x-cloak
+                                    class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-10">
+                                    <ul class="py-1 text-white">
+                                        @haspermission('VER DETALLES DE LA BITACORA')
+                                            <li>
+                                                <a href="{{ route('binnacles.show', $binnacle) }}"
+                                                    class="block px-4 py-2 hover:bg-gray-700">
+                                                    Ver detalles
+                                                </a>
+                                            </li>
+                                        @endhaspermission
+
+                                        @haspermission('IMPRIMIR BITACORA')
+                                            <li>
+                                                <a href="{{ route('binnacles.export-pdf', $binnacle) }}" target="_blank"
+                                                    class="block px-4 py-2 hover:bg-gray-700">
+                                                    Imprimir
+                                                </a>
+                                            </li>
+                                        @endhaspermission
+
+                                        @haspermission('EDITAR BITACORA')
+                                            <li>
+                                                <a href="{{ route('binnacles.edit', $binnacle) }}"
+                                                    class="block px-4 py-2 hover:bg-gray-700">
+                                                    Editar
+                                                </a>
+                                            </li>
+                                        @endhaspermission
+
+                                        @haspermission('ELIMINAR BITACORA')
+                                            <li>
+                                                <form id="delete-form-{{ $binnacle->id }}"
+                                                    action="{{ route('binnacles.destroy', $binnacle) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                        onclick="confirmDelete('delete-form-{{ $binnacle->id }}')"
+                                                        class="block w-full text-left px-4 py-2 hover:bg-red-700">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        @endhaspermission
+                                    </ul>
+                                </div>
                             </div>
                         </td>
 

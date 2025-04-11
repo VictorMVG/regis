@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Mpdf\Mpdf;
 
 class BinnacleController extends Controller
 {
@@ -346,5 +347,65 @@ class BinnacleController extends Controller
         }
 
         return Excel::download(new BinnaclesTodayExport, $fileName);
+    }
+
+    public function exportPdf(Binnacle $binnacle)
+    {
+        $companyName = "Nombre de la Empresa"; // Cambia esto por el nombre real de la empresa
+        $contactInfo = "Tel: 123-456-7890 | Email: contacto@sippsa.mx"; // Información de contacto
+        $logoPath = Storage::url('recursos/logosippsa.png'); // Ruta al logo en storage/public
+        $currentDate = now()->format('d/m/Y'); // Fecha de impresión
+
+        // Cargar la vista y pasar los datos
+        $html = view('bitacoras.bitacora.binnaclePDF', compact('binnacle', 'companyName', 'contactInfo', 'currentDate', 'logoPath'))->render();
+
+        // Configurar mPDF
+        $mpdf = new Mpdf([
+            'format' => 'A4', // Formato vertical
+            'margin_top' => 40, // Margen superior
+            'margin_bottom' => 30, // Margen inferior
+            'margin_left' => 10, // Margen izquierdo
+            'margin_right' => 10, // Margen derecho
+        ]);
+
+        $mpdf->SetHTMLHeader('
+        <table style="width: 100%; padding-bottom: 10px; border-collapse: collapse; border: none;" border="0">
+            <tr>
+                <!-- Logo a la izquierda -->
+                <td style="width: 10%; text-align: left; border: none;">
+                    <img src="' . $logoPath . '" alt="Logo" style="height: 90px; max-height: 100px;">
+                </td>
+                
+                <!-- Nombre de la empresa centrado -->
+                <td style="width: 60%; text-align: left; border: none;">
+                    <div style="font-size: 32px; font-weight: bold;">
+                        GRUPO SIPPSA
+                    </div>
+                    <div style="font-size: 20px; font-weight: normal;">
+                        SEGURIDAD PRIVADA
+                    </div>
+                </td>
+                
+                <!-- Fecha de impresión a la derecha -->
+                <td style="width: 30%; text-align: right; font-size: 14px; border: none;">
+                    Fecha de impresión: ' . $currentDate . '
+                </td>
+            </tr>
+        </table>
+    ');
+
+        // Pie de página
+        $mpdf->SetHTMLFooter('
+        <div style="text-align: right; font-size: 12px;">
+            Página {PAGENO} de {nbpg}<br>
+            ' . $contactInfo . '
+        </div>
+    ');
+
+        // Escribir el contenido HTML
+        $mpdf->WriteHTML($html);
+
+        // Descargar el PDF
+        return $mpdf->Output('Registro_De_Bitacora.pdf', 'I'); // 'D' para descargar, 'I' para mostrar en el navegador
     }
 }

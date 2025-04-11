@@ -125,10 +125,9 @@
                         {{-- <td class="px-4 py-2 flex items-center justify-center relative" x-data="{ open: {}, up: false }">
 
                             <!-- Ícono para actualizar exit_time -->
-                            @if (
-                                !$visit->exit_time &&
-                                    auth()->user()->hasAnyRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL', 'ADMINISTRADOR DE SEDE', 'GUARDIA']) &&
-                                    $visit->created_at->isToday())
+                            @if (!$visit->exit_time &&
+    auth()->user()->hasAnyRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL', 'ADMINISTRADOR DE SEDE', 'GUARDIA']) &&
+    $visit->created_at->isToday())
                                 <form action="{{ route('visits.updateExitTime', $visit->id) }}" method="POST"
                                     class="ml-2">
                                     @csrf
@@ -152,7 +151,7 @@
                                 ]" />
                             @endif
                         </td> --}}
-                        <td class="py-2">
+                        {{-- <td class="py-2">
                             <div class="flex flex-wrap justify-between items-center">
                                 @haspermission('VER DETALLES DE LA VISITA')
                                     <a href="{{ route('visits.show', $visit) }}"
@@ -168,7 +167,7 @@
                                 @endhaspermission
 
                                 @if (auth()->user()->hasRole(['SUPER USUARIO', 'ADMINISTRADOR GENERAL', 'ADMINISTRADOR DE SEDE']) ||
-                                        $visit->user_id === auth()->id())
+    $visit->user_id === auth()->id())
                                     @haspermission('EDITAR VISITA')
                                         <a href="{{ route('visits.edit', $visit) }}"
                                             class="flex justify-center items-center w-1/2" title="Editar">
@@ -207,6 +206,87 @@
                                     </form>
                                 @endhaspermission
                             </div>
+                        </td> --}}
+                        <td class="py-2">
+                            @if (auth()->user()->hasRole('GUARDIA') && $visit->exit_time)
+                                <!-- Mostrar solo la opción "Ver detalles" para el rol GUARDIA si ya tiene salida -->
+                                <a href="{{ route('visits.show', $visit) }}"
+                                    class="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                    Ver detalles
+                                </a>
+                            @else
+                                <!-- Menú desplegable para otros roles o si no tiene salida -->
+                                <div class="relative" x-data="{ open: false }">
+                                    <!-- Botón del menú -->
+                                    <button @click="open = !open"
+                                        class="flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                        Opciones
+                                        <svg :class="open ? 'rotate-180' : 'rotate-0'"
+                                            class="w-4 h-4 ml-2 transition-transform duration-200"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+
+                                    </button>
+
+                                    <!-- Menú desplegable -->
+                                    <div x-show="open" @click.away="open = false" x-cloak
+                                        class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-10">
+                                        <ul class="py-1 text-white">
+                                            @haspermission('VER DETALLES DE LA VISITA')
+                                                <li>
+                                                    <a href="{{ route('visits.show', $visit) }}"
+                                                        class="block px-4 py-2 hover:bg-gray-700">
+                                                        Ver detalles
+                                                    </a>
+                                                </li>
+                                            @endhaspermission
+
+                                            @haspermission('EDITAR VISITA')
+                                                <li>
+                                                    <a href="{{ route('visits.edit', $visit) }}"
+                                                        class="block px-4 py-2 hover:bg-gray-700">
+                                                        Editar
+                                                    </a>
+                                                </li>
+                                            @endhaspermission
+
+                                            @haspermission('MARCAR SALIDA DE VISITA')
+                                                @if (!$visit->exit_time && $visit->created_at->isToday())
+                                                    <li>
+                                                        <form action="{{ route('visits.updateExitTime', $visit->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit"
+                                                                class="block w-full text-left px-4 py-2 hover:bg-blue-700 animate-pulse">
+                                                                Marcar salida
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endif
+                                            @endhaspermission
+
+                                            @haspermission('ELIMINAR VISITA')
+                                                <li>
+                                                    <form id="delete-form-{{ $visit->id }}"
+                                                        action="{{ route('visits.destroy', $visit) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="confirmDelete('delete-form-{{ $visit->id }}')"
+                                                            class="block w-full text-left px-4 py-2 hover:bg-red-700">
+                                                            Eliminar
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            @endhaspermission
+                                        </ul>
+                                    </div>
+                                </div>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
