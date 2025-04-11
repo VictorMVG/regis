@@ -128,7 +128,7 @@ class VisitController extends Controller
      */
     public function show(Visit $visit)
     {
-        //
+        return view('visitas.visita.show', compact('visit'));
     }
 
     /**
