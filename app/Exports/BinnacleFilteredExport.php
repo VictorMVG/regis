@@ -29,25 +29,25 @@ class BinnacleFilteredExport implements FromCollection, WithHeadings, WithMappin
     {
         return [
             'FECHA',
-            'TÍTULO',
-            'OBSERVACIÓN',
-            'TIPO DE OBSERVACIÓN',
-            'USUARIO',
             'SEDE',
-            'ACTUALIZADO POR',
+            'TÍTULO DE LA OBSERVACIÓN',
+            'TIPO DE OBSERVACIÓN',
+            'QUIEN CREO EL REGISTRO',
+            'OBSERVACIÓN',
+            'ULTIMO QUE LO ACTUALIZÓ',
         ];
     }
 
     public function map($binnacle): array
     {
         return [
-            $binnacle->created_at->format('d/m/Y'),
-            $binnacle->title,
-            $binnacle->observation,
-            $binnacle->observationType->name,
-            $binnacle->user->name,
-            $binnacle->headquarter->company->name . ' - ' . $binnacle->headquarter->name,
-            $binnacle->updatedBy ? $binnacle->updatedBy->name : '',
+            $binnacle->created_at->format('d/m/Y'), // Fecha de creación
+            $binnacle->headquarter->company->name . ' - ' . $binnacle->headquarter->name, // Sede
+            $binnacle->title, // Título
+            $binnacle->observationType->name, // Tipo de observación
+            $binnacle->user->name, // Usuario que creó la bitácora
+            $binnacle->observation, // Observación
+            $binnacle->updatedBy ? $binnacle->updatedBy->name : '', // Usuario que actualizó
         ];
     }
 
